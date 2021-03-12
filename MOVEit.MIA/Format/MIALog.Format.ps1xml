@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <Name>MIAReportTaskRun</Name>
+      <ViewSelectedBy>
+        <TypeName>MIAReportTaskRun</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+        <TableColumnHeader>
+            <Label>Start Time</Label>
+            <Width>20</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Task Name</Label>
+            <Width>30</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Duration</Label>
+            <Width>8</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Result</Label>
+            <Width>12</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Files Sent</Label>
+            <Width>12</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Total Bytes Sent</Label>
+            <Width>12</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Message</Label>
+            <Width>35</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <ScriptBlock>"{0,10:yyyy-MM-dd}  {0,8:h:mm tt}" -f [DateTime]::Parse($_.StartTime)</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>TaskName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>"{0:m\:ss}" -f [TimeSpan]::FromSeconds($_.DurationSecond)</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Status</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>FilesSent</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>
+                  switch($_.TotalBytesSent)
+                  {
+                    { $_ -gt 1tb }
+                            { "{0:n0} TB" -f ($_ / 1tb);break }
+                    { $_ -gt 1gb }
+                            { "{0:n0} GB" -f ($_ / 1gb);break }
+                    { $_ -gt 1mb }
+                            { "{0:n0} MB" -f ($_ / 1mb);break }
+                    { $_ -gt 1kb }
+                            { "{0:n0} KB" -f ($_ / 1Kb);break }
+                    { $_ -gt 1 }
+                            { "{0} B" -f $_}
+                  }
+                </ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>StatusMsg</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>MIAReportFileActivity</Name>
+      <ViewSelectedBy>
+        <TypeName>MIAReportFileActivity</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>Log Time</Label>
+            <Width>20</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Task Name</Label>
+            <Width>35</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Src. File Name</Label>
+            <Width>25</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Action</Label>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Result</Label>
+            <Width>12</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Size</Label>
+            <Width>12</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <ScriptBlock>"{0,10:yyyy-MM-dd}  {0,8:h:mm tt}" -f [DateTime]::Parse($_.LogStamp)</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>TaskName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>SourceFile</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Action</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>
+                  if($_.StatusCode -eq 0) {
+                    "Success"
+                  }
+                  else {
+                    "$($_.StatusMsg)"
+                  }
+                </ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>
+                  switch($_.DestBytes)
+                  {
+                    { $_ -gt 1tb }
+                            { "{0:n0} TB" -f ($_ / 1tb);break }
+                    { $_ -gt 1gb }
+                            { "{0:n0} GB" -f ($_ / 1gb);break }
+                    { $_ -gt 1mb }
+                            { "{0:n0} MB" -f ($_ / 1mb);break }
+                    { $_ -gt 1kb }
+                            { "{0:n0} KB" -f ($_ / 1Kb);break }
+                    { $_ -gt 1 }
+                            { "{0} B" -f $_}
+                  }
+                </ScriptBlock>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>MIAReportFileActivityByTaskrun</Name>
+      <ViewSelectedBy>
+        <TypeName>MIAReportFileActivity</TypeName>
+      </ViewSelectedBy>
+      <GroupBy>
+        <Label>Task Run</Label>
+        <ScriptBlock>$_.TaskName,$_.NominalStart -join ' at '</ScriptBlock>
+      </GroupBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>Log Time</Label>
+            <Width>11</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>                    
+          <TableColumnHeader>
+            <Label>Action</Label>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Src. Path</Label>
+            <Width>40</Width>
+          </TableColumnHeader><TableColumnHeader>
+            <Label>Dest. Path</Label>
+            <Width>40</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Result</Label>
+            <Width>12</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Size</Label>
+            <Width>12</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <ScriptBlock>"{0,11:h:mm:ss tt}" -f [DateTime]::Parse($_.LogStamp)</ScriptBlock>
+              </TableColumnItem>                            
+              <TableColumnItem>
+                <PropertyName>Action</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>SourcePath</PropertyName>
+              </TableColumnItem><TableColumnItem>
+                <PropertyName>DestPath</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>
+                  if($_.StatusCode -eq 0) {
+                    "Success"
+                  }
+                  else {
+                    "$($_.StatusMsg)"
+                  }
+                </ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>
+                  switch($_.DestBytes)
+                  {
+                    { $_ -gt 1tb }
+                            { "{0:n0} TB" -f ($_ / 1tb);break }
+                    { $_ -gt 1gb }
+                            { "{0:n0} GB" -f ($_ / 1gb);break }
+                    { $_ -gt 1mb }
+                            { "{0:n0} MB" -f ($_ / 1mb);break }
+                    { $_ -gt 1kb }
+                            { "{0:n0} KB" -f ($_ / 1Kb);break }
+                    { $_ -gt 1 }
+                            { "{0} B" -f $_}
+                  }
+                </ScriptBlock>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>MIAReportAudit</Name>
+      <ViewSelectedBy>
+        <TypeName>MIAReportAudit</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+        <TableColumnHeader>
+            <Label>Log Time</Label>
+            <Width>20</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Action</Label>
+            <Width>15</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Target Type</Label>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Target Name</Label>
+            <Width>20</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Result</Label>
+            <Width>12</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Username</Label>
+            <Width>15</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>IPAddress</Label>
+            <Width>14</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <ScriptBlock>"{0,10:yyyy-MM-dd}  {0,8:h:mm tt}" -f [DateTime]::Parse($_.LogTime)</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Action</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>TargetType</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>TargetName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>
+                  if($_.StatusCode -eq 0) {
+                    "Success"
+                  }
+                  else {
+                    "$($_.StatusMsg)"
+                  }
+                </ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Username</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>IPAddress</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>
