@@ -41,7 +41,8 @@ function Connect-MIAServer {
     $params = @{ 
         Method = 'POST'
         ContentType = 'application/x-www-form-urlencoded'        
-        Headers = @{Accept = "application/json"}            
+        Headers = @{Accept = "application/json"} 
+        UserAgent = 'MOVEit REST API'           
     }
     try {                    
         $response = @{
