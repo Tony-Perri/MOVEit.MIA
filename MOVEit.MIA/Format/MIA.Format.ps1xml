@@ -214,37 +214,82 @@
         </TableRowEntries>
       </TableControl>
     </View>
-        <View>
-        <Name>MIAPaging</Name>
-        <OutOfBand />        
-        <ViewSelectedBy>
-            <TypeName>MIAPaging</TypeName>
-        </ViewSelectedBy>
-        <CustomControl>     
-          <CustomEntries>
-            <CustomEntry>                              
-                <CustomItem>
-                    <NewLine/>
-                    <Text>Total items: </Text>
-                    <ExpressionBinding>
-                        <PropertyName>totalItems</PropertyName>
-                    </ExpressionBinding>   
-                    <Text>  Per page: </Text>
-                    <ExpressionBinding>
-                        <PropertyName>perPage</PropertyName>
-                    </ExpressionBinding>     
-                    <Text>  Displaying page: </Text>
-                    <ExpressionBinding>
-                        <PropertyName>page</PropertyName>
-                    </ExpressionBinding> 
-                    <Text> of </Text>
-                    <ExpressionBinding>
-                        <PropertyName>totalPages</PropertyName>
-                    </ExpressionBinding>                          
-                </CustomItem>               
-            </CustomEntry>
-          </CustomEntries>       
-        </CustomControl>
+    <View>
+      <Name>MIATaskLog</Name>
+      <ViewSelectedBy>
+        <TypeName>MIATaskLog</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+        <TableColumnHeader>
+            <Label>Id</Label>
+            <Width>12</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>TaskId</Label>
+            <Width>17</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Start Time</Label>
+            <Width>20</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Status</Label>
+            <Width>15</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>id</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>taskId</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>"{0,10:yyyy-MM-dd}  {0,8:h:mm tt}" -f [DateTime]::Parse($_.startTime)</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>exitStatus</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>MIAPaging</Name>
+      <OutOfBand />        
+      <ViewSelectedBy>
+        <TypeName>MIAPaging</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>     
+        <CustomEntries>
+          <CustomEntry>                              
+            <CustomItem>
+              <NewLine/>
+              <Text>Total items: </Text>
+              <ExpressionBinding>
+                <PropertyName>totalItems</PropertyName>
+              </ExpressionBinding>   
+              <Text>  Per page: </Text>
+              <ExpressionBinding>
+                <PropertyName>perPage</PropertyName>
+              </ExpressionBinding>     
+              <Text>  Displaying page: </Text>
+              <ExpressionBinding>
+                <PropertyName>page</PropertyName>
+              </ExpressionBinding> 
+              <Text> of </Text>
+              <ExpressionBinding>
+                <PropertyName>totalPages</PropertyName>
+              </ExpressionBinding>                          
+            </CustomItem>               
+          </CustomEntry>
+        </CustomEntries>       
+      </CustomControl>
     </View>
   </ViewDefinitions>
 </Configuration>
