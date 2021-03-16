@@ -57,6 +57,9 @@ function Get-MIATaskLog {
          
         switch ($PSCmdlet.ParameterSetName) {
             'Detail' {
+                # This request is for text/plain
+                $headers['Accept'] = 'text/plain'
+                
                 $response = Invoke-RestMethod -Uri "$uri/$TaskLogId" -Headers $headers
                 Write-Output $response
             }
