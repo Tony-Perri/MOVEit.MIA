@@ -145,6 +145,6 @@ function Get-MIAReportTaskRun {
         $response.items | foreach-object { $_.PSOBject.TypeNames.Insert(0, 'MIAReportTaskRun'); $_ }        
     }
     catch {
-        $_
+        $PSCmdlet.ThrowTerminatingError($PSItem)
     }
 }

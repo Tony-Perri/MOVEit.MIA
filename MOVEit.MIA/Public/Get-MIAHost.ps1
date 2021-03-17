@@ -40,27 +40,20 @@ function Get-MIAHost {
         [switch]$IncludePaging
     )
 
-    # Check to see if Connect-MIAServer has been called and exit with an error
-    # if it hasn't.
-    if (-not $script:BaseUri) {
-        Write-Error "BaseUri is invalid.  Try calling Connect-MIAServer first."
-        return        
-    }
-
-    # Set the Uri for this request
-    $uri = "$script:BaseUri/hosts"
-                
-    # Set the request headers
-    $headers = @{
-        Accept = "application/json"
-        Authorization = "Bearer $($script:Token.AccessToken)"
-    }    
-
-    # Send the request and write the response
-    try {   
+    try {
         # Confirm the Token, refreshing if necessary
         Confirm-MIAToken
-         
+
+        # Set the Uri for this request
+        $uri = "$script:BaseUri/hosts"
+                    
+        # Set the request headers
+        $headers = @{
+            Accept = "application/json"
+            Authorization = "Bearer $($script:Token.AccessToken)"
+        }    
+
+        # Send the request and write the response
         switch ($PSCmdlet.ParameterSetName) {
             'Detail' {
                 $response = Invoke-RestMethod -Uri "$uri/$HostId" -Headers $headers
@@ -113,6 +106,6 @@ function Get-MIAHost {
         }
     }
     catch {
-        $_
+        $PSCmdlet.ThrowTerminatingError($PSItem)
     }
 }

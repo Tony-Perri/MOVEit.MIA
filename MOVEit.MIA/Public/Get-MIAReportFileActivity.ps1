@@ -141,6 +141,6 @@ function Get-MIAReportFileActivity {
         $response.items | foreach-object { $_.PSOBject.TypeNames.Insert(0, 'MIAReportFileActivity'); $_ }
     }
     catch {
-        $_
+        $PSCmdlet.ThrowTerminatingError($PSItem)
     }
 }
