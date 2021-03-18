@@ -26,7 +26,7 @@ function Get-MIATask {
                     ParameterSetName='List')]
         [Parameter(Mandatory=$false,
                     ParameterSetName='Running')]
-        [string]$Fields,
+        [string[]]$Fields,
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
@@ -70,7 +70,7 @@ function Get-MIATask {
                 $query = @{}
                 switch ($PSBoundParameters.Keys) {
                     Name { $query['name'] = $Name }
-                    Fields { $query['fields'] = $Fields }
+                    Fields { $query['fields'] = $Fields -join ',' }
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
@@ -81,7 +81,7 @@ function Get-MIATask {
                 $query = @{}
                 switch ($PSBoundParameters.Keys) {
                     Name { $query['name'] = $Name }
-                    Fields { $query['fields'] = $Fields }
+                    Fields { $query['fields'] = $Fields -join ',' }
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }

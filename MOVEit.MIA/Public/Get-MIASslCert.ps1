@@ -11,7 +11,7 @@ function Get-MIASSLCert {
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
-        [string]$Fields,
+        [string[]]$Fields,
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
@@ -49,7 +49,7 @@ function Get-MIASSLCert {
                 $query = @{}
                 switch ($PSBoundParameters.Keys) {
                     Issuer { $query['issuer'] = $Issuer }
-                    Fields { $query['fields'] = $Fields }
+                    Fields { $query['fields'] = $Fields -join ',' }
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }

@@ -15,7 +15,7 @@ function Get-MIAPgpKey {
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
-        [string]$Fields,
+        [string[]]$Fields,
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
@@ -53,7 +53,7 @@ function Get-MIAPgpKey {
                 $query = @{}
                 switch ($PSBoundParameters.Keys) {
                     Uid { $query['uid'] = $Uid }
-                    Fields { $query['fields'] = $Fields }
+                    Fields { $query['fields'] = $Fields -join ',' }
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }

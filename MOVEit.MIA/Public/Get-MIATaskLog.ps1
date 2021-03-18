@@ -19,7 +19,7 @@ function Get-MIATaskLog {
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
-        [string]$Fields,
+        [string[]]$Fields,
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
@@ -59,7 +59,7 @@ function Get-MIATaskLog {
             'List' {
                 $query = @{}
                 switch ($PSBoundParameters.Keys) {
-                    Fields { $query['fields'] = $Fields }
+                    Fields { $query['fields'] = $Fields -join ','}
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
