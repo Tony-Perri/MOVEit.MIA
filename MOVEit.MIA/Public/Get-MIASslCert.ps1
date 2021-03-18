@@ -11,6 +11,9 @@ function Get-MIASSLCert {
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
+        [ValidateSet('Store','IssuedTo','Issuer','SerialNum',
+                    'ExpDate','ValidFromDate','SHA1Thumbprint',
+                    'xIsExpired','xInExpirationRange', IgnoreCase = $false)]
         [string[]]$Fields,
 
         [Parameter(Mandatory=$false,

@@ -19,6 +19,7 @@ function Get-MIATaskLog {
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
+        [ValidateSet('id','taskId','startTime','exitStatus', IgnoreCase = $false)]                    
         [string[]]$Fields,
 
         [Parameter(Mandatory=$false,

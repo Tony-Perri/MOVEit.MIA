@@ -26,6 +26,10 @@ function Get-MIATask {
                     ParameterSetName='List')]
         [Parameter(Mandatory=$false,
                     ParameterSetName='Running')]
+        [ValidateSet('Group','ID','Name','Info','NextActions',
+                    'Schedules','Scheduled','steps','Active','AR',
+                    'CacheNames','NextEID','TT','UseDefStateCaching',
+                    'Watched',IgnoreCase = $false)]     
         [string[]]$Fields,
 
         [Parameter(Mandatory=$false,

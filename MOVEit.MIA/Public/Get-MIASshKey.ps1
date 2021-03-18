@@ -11,6 +11,8 @@ function Get-MIASshKey {
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
+        [ValidateSet('ID','Name','Fingerprint','PublicKeySSH',
+                    'PublicKeyOpenSSH', IgnoreCase = $false)]
         [string[]]$Fields,
 
         [Parameter(Mandatory=$false,

@@ -23,6 +23,9 @@ function Get-MIAHost {
                         'SharePoint', 'AzureBlob', IgnoreCase = $false)]
         [string]$Type,
 
+        [ValidateSet('Group','ID','Name','IsUsed','DefRetryCount',
+                    'DefRetryTimeoutSecs','RenameAfterUpload','TempUploadName',
+                    'UseNotif','Host','Port','DefRescanSecs', IgnoreCase = $false)]
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
         [string[]]$Fields,

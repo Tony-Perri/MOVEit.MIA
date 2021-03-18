@@ -15,6 +15,10 @@ function Get-MIAPgpKey {
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]
+        [ValidateSet('ID','uid','PubPriv','KeyType','KeyLength',
+                    'Expired','Revoked','Disabled','Created','Expires',
+                    'Status','Fingerprint','SymAlg','xInExpirationRange',
+                    IgnoreCase = $false)]
         [string[]]$Fields,
 
         [Parameter(Mandatory=$false,
