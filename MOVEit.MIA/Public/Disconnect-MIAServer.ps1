@@ -34,7 +34,7 @@ function Disconnect-MIAServer {
         }
 
         # Send the request and output the response
-        $response = Invoke-RestMethod @irmParams
+        Invoke-RestMethod @irmParams | Out-Null
         Write-Output "Disconnected from MOVEit Automation server"
     }
     catch {
