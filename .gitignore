@@ -1,1 +1,2 @@
-Test-MOVEit.MIA.ps1
+Test-*.ps1
+publish-module.ps1

@@ -32,6 +32,20 @@ function Get-MIAReportTaskRun {
         [ValidateNotNullOrEmpty()]
         [string]$Predicate = 'Status=in=("Success","Failure")',
 
+        # Parameters for a specific task run
+        [Parameter(Mandatory=$false,
+                    ValueFromPipelineByPropertyName,
+                    ParameterSetName='BuildRsql')]
+        [ValidateNotNullOrEmpty()]
+        [string]$TaskId,
+
+        # Parameters for a specific task run
+        [Parameter(Mandatory=$false,
+                    ValueFromPipelineByPropertyName,
+                    ParameterSetName='BuildRsql')]
+        [ValidateNotNullOrEmpty()]
+        [string]$NominalStart,
+
         # Filter by taskname ==, =like=. Accepts * and ? for wildcards.
         # Filter by tasknames =in=.
         [Parameter(Mandatory=$false, ParameterSetName='BuildRsql')]
@@ -79,6 +93,12 @@ function Get-MIAReportTaskRun {
     if ($PSCmdlet.ParameterSetName -eq 'BuildRsql') {         
         $Predicate = $(
             switch ($PSBoundParameters.Keys) {
+                TaskId {
+                    'TaskId=="{0}"' -f $TaskId
+                }
+                NominalStart {
+                    'NominalStart=="{0}"' -f $NominalStart
+                }
                 Taskname {
                     if ($Taskname.Count -gt 1) {
                         'Taskname=in=("{0}")' -f ($Taskname -join '","')
@@ -145,6 +165,6 @@ function Get-MIAReportTaskRun {
         $response.items | foreach-object { $_.PSOBject.TypeNames.Insert(0, 'MIAReportTaskRun'); $_ }        
     }
     catch {
-        $_
+        $PSCmdlet.ThrowTerminatingError($PSItem)
     }
 }

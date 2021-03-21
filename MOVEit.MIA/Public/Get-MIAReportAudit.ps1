@@ -128,6 +128,6 @@ function Get-MIAReportAudit
         $response.items | foreach-object { $_.PSOBject.TypeNames.Insert(0, 'MIAReportAudit'); $_ }
     }
     catch {
-        $_
+        $PSCmdlet.ThrowTerminatingError($PSItem)
     }
 }

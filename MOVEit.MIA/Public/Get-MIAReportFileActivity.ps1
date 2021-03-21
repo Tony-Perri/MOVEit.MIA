@@ -32,6 +32,20 @@ function Get-MIAReportFileActivity {
         [ValidateNotNullOrEmpty()]
         [string]$Predicate = 'StatusCode=out=("5000","5001")',
 
+        # Parameters for a specific task run
+        [Parameter(Mandatory=$false,
+                    ValueFromPipelineByPropertyName,
+                    ParameterSetName='BuildRsql')]
+        [ValidateNotNullOrEmpty()]
+        [string]$TaskId,
+
+        # Parameters for a specific task run
+        [Parameter(Mandatory=$false,
+                    ValueFromPipelineByPropertyName,
+                    ParameterSetName='BuildRsql')]
+        [ValidateNotNullOrEmpty()]
+        [string]$NominalStart,
+
         # Filter by taskname(s) ==, =like=, =in=
         [Parameter(Mandatory=$false, ParameterSetName='BuildRsql')]
         [ValidateNotNullOrEmpty()]
@@ -65,7 +79,7 @@ function Get-MIAReportFileActivity {
         # maxCount for REST call
         [Parameter(Mandatory=$false)]
         [ValidateRange(1, 100000)]
-        [int32]$MaxCount = 100
+        [int32]$MaxCount = 100        
     )
     
     # Build the predicate based on the params passed in if
@@ -73,6 +87,12 @@ function Get-MIAReportFileActivity {
     if ($PSCmdlet.ParameterSetName -eq 'BuildRsql') {         
         $Predicate = $(
             switch ($PSBoundParameters.Keys) {
+                TaskId {
+                    'TaskId=="{0}"' -f $TaskId
+                }
+                NominalStart {
+                    'NominalStart=="{0}"' -f $NominalStart
+                }
                 Taskname {
                     if ($Taskname.Count -gt 1) {
                         'Taskname=in=("{0}")' -f ($Taskname -join '","')
@@ -100,7 +120,7 @@ function Get-MIAReportFileActivity {
                 }
                 Action {
                     if ($Action.Count -gt 1) {
-                        'Action=in=({0})' -f ($Action -join '","')
+                        'Action=in=({0})' -f ($Action -join ',')
                     }
                     else {
                         'Action=={0}' -f $Action
@@ -108,7 +128,7 @@ function Get-MIAReportFileActivity {
                 }
             } ) -join ';'
     }
-
+    
     Write-Verbose $Predicate
 
     try {
@@ -141,6 +161,6 @@ function Get-MIAReportFileActivity {
         $response.items | foreach-object { $_.PSOBject.TypeNames.Insert(0, 'MIAReportFileActivity'); $_ }
     }
     catch {
-        $_
+        $PSCmdlet.ThrowTerminatingError($PSItem)
     }
 }
