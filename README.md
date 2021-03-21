@@ -11,7 +11,7 @@ MOVEit.MIA is a PowerShell module for using the [MOVEit Automation REST API](htt
 ## Installation
 MOVEit.MIA can be installed from the PowerShell Gallery using the command:
 ```powershell
-Install-Module -Name MOVEit.MIA
+Install-Module -Name MOVEit.MIA -Scope AllUsers
 ```
 ## Getting Started
 Once installed, you should be able to access the MOVEit Automation REST API using the module commands either from a command-prompt or a script.
