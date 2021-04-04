@@ -13,8 +13,13 @@ function Wait-MIATask {
             ValueFromPipelineByPropertyName)]
         [string]$NominalStart,
 
-        [Parameter()]
-        [int32]$Timeout = 60
+        [Parameter(Mandatory=$false)]
+        [int32]$Timeout = 60,
+
+        # Context
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Context = $script:DEFAULT_CONTEXT
     )
 
     try {
@@ -24,7 +29,8 @@ function Wait-MIATask {
 
         do {
             Start-Sleep -Seconds 2
-            $running = (Get-MIATask -Running | Where-Object {$_.TaskId -eq $TaskId -and $_.NominalStart -eq $NominalStart})        
+            $running = (Get-MIATask -Running -Context $Context | 
+                            Where-Object {$_.TaskId -eq $TaskId -and $_.NominalStart -eq $NominalStart})        
             $elapsed = New-TimeSpan -Start $startTime
         } while ($running -and $elapsed.TotalSeconds -le $Timeout) 
 

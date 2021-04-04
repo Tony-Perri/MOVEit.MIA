@@ -10,20 +10,30 @@ function Start-MIATask {
                     ValueFromPipelineByPropertyName)]
         [Alias('Id')]
         [string]$TaskId,
-        [hashtable]$Params
+
+        [Parameter(Mandatory=$false)]
+        [hashtable]$Params,
+
+        # Context
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Context = $script:DEFAULT_CONTEXT
     )
         
     try {
         # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken        
+        Confirm-MIAToken -Context $Context
+        
+        # Get the context
+        $ctx = Get-MIAContext -Context $Context
 
         # Set the Uri for this request
-        $uri = "$script:BaseUri/tasks"
+        $uri = "$($ctx.BaseUri)/tasks"
                     
         # Set the request headers
         $headers = @{
             Accept = "application/json"
-            Authorization = "Bearer $($script:Token.AccessToken)"
+            Authorization = "Bearer $($ctx.Token.AccessToken)"
         } 
 
         # Setup the params to splat to IRM

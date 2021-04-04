@@ -24,21 +24,26 @@ function Connect-MIAServer {
         # Hostname for the endpoint                 
         [Parameter(Mandatory=$true)]
         [string]$Hostname,
-
+        
         # Credentials
         [Parameter(Mandatory=$true)]
-        [pscredential]$Credential
+        [pscredential]$Credential,
+        
+        # Context
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Context = $script:DEFAULT_CONTEXT
     )     
     
-    try {                    
-        # Clear any existing Token
-        $script:Token = @()
-
-        # Set the Base Uri
-        $script:BaseUri = "https://$Hostname/api/v1"
+    try {   
+        # Initialize the context
+        $ctx = @{
+            Token = @()
+            BaseUri = "https://$Hostname/api/v1"
+        }
         
         # Build the request
-        $uri = "$script:BaseUri/token"
+        $uri = "$($ctx.BaseUri)/token"
         $params = @{ 
             Method = 'POST'
             ContentType = 'application/x-www-form-urlencoded'        
@@ -52,13 +57,17 @@ function Connect-MIAServer {
             } | Invoke-RestMethod -Uri $uri @params
 
         if ($response.access_token) {
-            $script:Token = @{                    
+            $ctx.Token = @{                    
                 AccessToken = $Response.access_token
                 CreatedAt = $(Get-Date)
                 ExpiresIn = $Response.expires_in
                 RefreshToken = $Response.refresh_token
             }
-            Write-Output "Connected to MOVEit Automation server $Hostname"
+
+            # Update the script variable with the new context
+            $script:Context[$Context] = $ctx
+
+            Write-Output "[$Context]: Connected to MOVEit Automation server $Hostname"
         }
     } 
     catch {

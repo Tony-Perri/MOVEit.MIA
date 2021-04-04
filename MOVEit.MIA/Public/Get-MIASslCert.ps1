@@ -26,20 +26,28 @@ function Get-MIASSLCert {
 
         [Parameter(Mandatory=$false,
                     ParameterSetName='List')]                         
-        [switch]$IncludePaging
+        [switch]$IncludePaging,
+
+        # Context
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Context = $script:DEFAULT_CONTEXT
     )
 
     try {   
         # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken
+        Confirm-MIAToken -Context $Context
+
+        # Get the context
+        $ctx = Get-MIAContext -Context $Context
         
         # Set the Uri for this request
-        $uri = "$script:BaseUri/sslcerts"
+        $uri = "$($ctx.BaseUri)/sslcerts"
         
         # Set the request headers
         $headers = @{
             Accept = "application/json"
-            Authorization = "Bearer $($script:Token.AccessToken)"
+            Authorization = "Bearer $($ctx.Token.AccessToken)"
         } 
 
         # Send the request and write the response

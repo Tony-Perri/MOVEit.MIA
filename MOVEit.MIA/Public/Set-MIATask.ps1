@@ -12,20 +12,28 @@ function Set-MIATask {
 
         [Parameter(Mandatory,
                     ValueFromPipeline)]
-        [psobject]$Task
+        [psobject]$Task,
+
+        # Context
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Context = $script:DEFAULT_CONTEXT
     )
 
     try {        
         # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken
+        Confirm-MIAToken -Context $Context
+
+        # Get the context
+        $ctx = Get-MIAContext -Context $Context
         
         # Build the request
         $params = @{
-            Uri = "$script:BaseUri/tasks/$TaskId"
+            Uri = "$($ctx.BaseUri)/tasks/$TaskId"
             Method = 'Put'
             Headers = @{
                 Accept = 'application/json'
-                Authorization = "Bearer $($script:Token.AccessToken)"
+                Authorization = "Bearer $($ctx.Token.AccessToken)"
             }
             ContentType = 'application/json'
         }
