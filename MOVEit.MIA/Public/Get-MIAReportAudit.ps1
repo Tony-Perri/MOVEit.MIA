@@ -63,7 +63,12 @@ function Get-MIAReportAudit
         # maxCount for REST call
         [Parameter(Mandatory=$false)]
         [ValidateRange(1, 100000)]
-        [int32]$MaxCount = 100
+        [int32]$MaxCount = 100,
+
+        # Context
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Context = $script:DEFAULT_CONTEXT
     )
     
     # Build the predicate based on the params passed in if
@@ -100,15 +105,18 @@ function Get-MIAReportAudit
 
     try {
         # Confirm the token, refreshing if necessary
-        Confirm-MIAToken
+        Confirm-MIAToken -Context $Context
+
+        # Get the context
+        $ctx = Get-MIAContext -Context $Context
 
         # Build the request
         $params = @{
-            Uri = "$script:BaseUri/reports/audit"
+            Uri = "$($ctx.BaseUri)/reports/audit"
             Method = 'Post'
             Headers = @{
                 Accept = 'application/json'
-                Authorization = "Bearer $($script:Token.AccessToken)"
+                Authorization = "Bearer $($ctx.Token.AccessToken)"
             }
             ContentType = 'application/json'
         }

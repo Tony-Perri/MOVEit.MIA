@@ -14,20 +14,28 @@ function Invoke-MIARestMethod {
         [hashtable]$Query,
 
         [Parameter(Mandatory=$false)]
-        [switch]$IncludePaging
+        [switch]$IncludePaging,
+
+        # Context
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Context = $script:DEFAULT_CONTEXT
     )
 
     try {
         # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken
+        Confirm-MIAToken -Context $Context
+
+        # Get the context
+        $ctx = Get-MIAContext -Context $Context
 
         # Set the Uri for this request
-        $uri = "$script:BaseUri/$Resource"
+        $uri = "$($ctx.BaseUri)/$Resource"
                     
         # Set the request headers
         $headers = @{
             Accept = "application/json"
-            Authorization = "Bearer $($script:Token.AccessToken)"
+            Authorization = "Bearer $($ctx.Token.AccessToken)"
         } 
 
         # Additonal params that will be splatted

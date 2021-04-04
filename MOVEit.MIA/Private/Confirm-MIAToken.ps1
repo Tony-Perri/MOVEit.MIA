@@ -16,46 +16,68 @@ function Confirm-MIAToken {
     #>    
     [CmdletBinding()]
     param (
+        # Context
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Context
     )
 
     try {
+        # Get the context
+        $ctx = $script:Context[$Context]
+
         # Check to see if Connect-MIAServer has been called and exit with an error
         # if it hasn't.
-        if (-not $script:BaseUri) {
-            Write-Error "BaseUri is invalid.  Try calling Connect-MIAServer first." -ErrorAction Stop
+        if (-not $ctx.BaseUri) {
+            Write-Error "[$Context]: BaseUri is invalid.  Try calling Connect-MIAServer first." -ErrorAction Stop
         }
 
         # Determine how close the token is to expiring
-        $elapsed = New-TimeSpan -Start $script:Token.CreatedAt
-        Write-Verbose "MIA Token at $($elapsed.TotalSeconds.ToString('F0')) of $($script:Token.ExpiresIn) seconds"
+        $elapsed = New-TimeSpan -Start $ctx.Token.CreatedAt
+        Write-Verbose "[$Context]: MIA Token at $($elapsed.TotalSeconds.ToString('F0')) of $($ctx.Token.ExpiresIn) seconds"
 
         # If the key is within 30 seconds of expiring, let's go ahead and
         # refresh it.
-        if ($elapsed.TotalSeconds -gt $script:Token.ExpiresIn - 30) {
+        if ($elapsed.TotalSeconds -gt $ctx.Token.ExpiresIn - 30) {
 
-            Write-Verbose "MIA Token expired, refreshing..."
+            Write-Verbose "[$Context]: MIA Token expired, refreshing..."
 
             $params = @{
-                Uri = "$script:BaseUri/token"
+                Uri = "$($ctx.BaseUri)/token"
                 Method = 'POST'
                 ContentType = 'application/x-www-form-urlencoded'
-                Body = "grant_type=refresh_token&refresh_token=$($script:Token.RefreshToken)"
+                Body = "grant_type=refresh_token&refresh_token=$($ctx.Token.RefreshToken)"
                 Headers = @{Accept = "application/json"}
             }
             
             $response = Invoke-RestMethod @params
             if ($response.access_token) {
-                $script:Token = @{                    
+                $ctx.Token = @{                    
                     AccessToken = $Response.access_token
                     CreatedAt = $(Get-Date)
                     ExpiresIn = $Response.expires_in
                     RefreshToken = $Response.refresh_token
                 }
-                Write-Verbose "MIA Token refreshed for access to $script:BaseUri"
+
+                # Update the script variable with the updated context
+                $script:Context[$Context] = $ctx
+                
+                Write-Verbose "[$Context]: MIA Token refreshed for access to $($ctx.BaseUri)"
             }        
         }
     }
     catch {
+        Write-Verbose "[$Context]: MIA Token not refreshed"
+
+        # Clear the saved Token
+        $ctx.Token = @()
+
+        # Clear the saved Base Uri
+        $ctx.BaseUri = ''
+
+        # Update the script variable with the updated context
+        $script:Context[$Context] = $ctx
+
         $PSCmdlet.ThrowTerminatingError($PSItem)
     }
 }

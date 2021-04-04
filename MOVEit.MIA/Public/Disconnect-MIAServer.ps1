@@ -5,14 +5,21 @@ function Disconnect-MIAServer {
     #>
     [CmdletBinding()]
     param (
+        # Context
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Context = $script:DEFAULT_CONTEXT
     )
 
     try {
         # Confirm the token, refreshing if necessary
-        Confirm-MIAToken
+        Confirm-MIAToken -Context $Context
+
+        # Get the context
+        $ctx = $script:Context[$Context]
 
         # Set the Uri for this request
-        $uri = "$script:BaseUri/token/revoke"
+        $uri = "$($ctx.BaseUri)/token/revoke"
                     
         # Set the request headers
         $headers = @{
@@ -21,7 +28,7 @@ function Disconnect-MIAServer {
 
         # Build the request body
         $body = @{
-            token = $script:Token.AccessToken
+            token = $ctx.Token.AccessToken
         }
 
         # Setup the params to splat to IRM
@@ -35,16 +42,19 @@ function Disconnect-MIAServer {
 
         # Send the request and output the response
         Invoke-RestMethod @irmParams | Out-Null
-        Write-Output "Disconnected from MOVEit Automation server"
+        Write-Output "[$Context]: Disconnected from MOVEit Automation server"
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)
     }
     finally {        
         # Clear the saved Token
-        $script:Token = @()
+        $ctx.Token = @()
 
         # Clear the saved Base Uri
-        $script:BaseUri = ''
+        $ctx.BaseUri = ''
+
+        # Update the script variable with the updated context
+        $script:Context[$Context] = $ctx
     }
 }

@@ -12,7 +12,7 @@
 RootModule = 'MOVEit.MIA.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.2.0'
+ModuleVersion = '0.2.1'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -30,7 +30,12 @@ Author = 'Tony Perri'
 Copyright = '(c) Tony Perri. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Module for accessing the MOVEit Automation REST API'
+Description = @'
+PowerShell Module for accessing the MOVEit Automation REST API
+
+For more information on the MOVEit Automation REST API, please visit the following:
+https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html
+'@
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.1'
@@ -106,7 +111,7 @@ PrivateData = @{
         # LicenseUri = ''
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/Tony-Perri/MOVEit.MIA/tree/support-multiple-contexts'
 
         # A URL to an icon representing this module.
         # IconUri = ''
@@ -115,7 +120,7 @@ PrivateData = @{
         # ReleaseNotes = ''
 
         # Prerelease string of this module
-        # Prerelease = ''
+        Prerelease = 'preview'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
