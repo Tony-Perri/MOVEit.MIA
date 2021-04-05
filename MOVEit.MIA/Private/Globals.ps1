@@ -1,10 +1,10 @@
 # BaseUri for the MOVEit Automation server
 # Will be set by Connect-MIAServer
-$script:BaseUri = ''
+# $script:BaseUri = '' # deprecated
 
 # Variable to hold the current Auth Token.
 # Will be set by Connect-MIAServer
-$script:Token = @()
+# $script:Token = @() # deprecated
 
 # Support multiple contexts using the 
 # -Context parameter.  We'll use a 
