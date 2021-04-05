@@ -105,12 +105,7 @@ Use the `-Verbose` parameter with any command to get additional troubleshooting 
 ```powershell
 Get-MIATaskRun -Verbose
 ```
-
-<<<<<<< HEAD
 ## Multiple Contexts
-=======
-## Context
->>>>>>> 6d18c18642690b763ce2bfcca2891f59d7de6435
 Use the `-Context` parameter with the `Connect-MIAServer` and subsequent commands in order to connect to multiple MOVEit Automation servers in the same session.
 ```powershell
 # Connect to the default server
@@ -120,11 +115,6 @@ Connect-MIAServer -Hostname '<your-automation-server' -Credential (Get-Credentia
 Connect-MIAServer -Hostname '<your-automation-server' -Credential (Get-Credential) -Context 'Backup'
 
 # Get tasks from both
-<<<<<<< HEAD
 $contexts = 'Default', 'Backup'
 $contexts | ForEach-Object { Get-MIATask -Context $_ }
-=======
-Get-MIATask
-Get-MIATask -Context 'Backup'
->>>>>>> 6d18c18642690b763ce2bfcca2891f59d7de6435
 ```
