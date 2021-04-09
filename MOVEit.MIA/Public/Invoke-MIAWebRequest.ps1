@@ -13,9 +13,6 @@ function Invoke-MIAWebRequest {
         [Parameter(Mandatory=$false)]
         [hashtable]$Query,
 
-        [Parameter(Mandatory=$false)]
-        [switch]$IncludePaging,
-
         # Context
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
