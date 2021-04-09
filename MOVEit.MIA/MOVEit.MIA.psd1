@@ -78,7 +78,8 @@ FunctionsToExport = @(
     'Get-MIAAudit','Get-MIAFileActivity','Get-MIATaskRun','Connect-MIAServer',
     'Disconnect-MIAServer','Get-MIAHost','Get-MIAInfo','Get-MIAPgpKey','Get-MIAReportAudit',
     'Get-MIAReportFileActivity','Get-MIAReportTaskRun','Get-MIASshKey','Get-MIASSLCert','Get-MIATask',
-    'Get-MIATaskLog','Invoke-MIARestMethod','New-MIATask','Set-MIATask','Start-MIATask','Wait-MIATask'
+    'Get-MIATaskLog','Invoke-MIARestMethod','New-MIATask','Set-MIATask','Start-MIATask','Wait-MIATask',
+    'Invoke-MIAWebRequest'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
