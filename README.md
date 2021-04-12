@@ -103,8 +103,14 @@ Invoke-MIARestMethod -Resource 'usergroups'
 ## Troubleshooting
 Use the `-Verbose` parameter with any command to get additional troubleshooting information.
 ```powershell
-Get-MIATaskRun -Verbose
+Get-MIATask -Verbose
 ```
+Use the `Invoke-MIAWebRequest` method that works similar to `Invoke-MIARestMethod` but returns the raw, unparsed HTTP response.
+```powershell
+# Get the raw response to the 'tasks' endpoint
+Invoke-MIAWebRequest -Resource 'tasks' -Verbose
+```
+
 ## Multiple Contexts
 Use the `-Context` parameter with the `Connect-MIAServer` and subsequent commands in order to connect to multiple MOVEit Automation servers in the same session.
 ```powershell

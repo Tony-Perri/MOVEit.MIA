@@ -12,7 +12,7 @@
 RootModule = 'MOVEit.MIA.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.2.1'
+ModuleVersion = '0.3.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -112,7 +112,7 @@ PrivateData = @{
         # LicenseUri = ''
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/Tony-Perri/MOVEit.MIA/tree/support-multiple-contexts'
+        ProjectUri = 'https://github.com/Tony-Perri/MOVEit.MIA'
 
         # A URL to an icon representing this module.
         # IconUri = ''
@@ -121,7 +121,7 @@ PrivateData = @{
         # ReleaseNotes = ''
 
         # Prerelease string of this module
-        Prerelease = 'preview'
+        # Prerelease = 'preview'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
