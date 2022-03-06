@@ -39,7 +39,7 @@ function Wait-MIATask {
             TaskId = $TaskId
             NominalStart = $NominalStart
             IsComplete = (-not $running)
-            Status = if ($running) {$running.status}
+            Status = if ($running) {$running.status};
             Elapsed = $elapsed
         }
     }
