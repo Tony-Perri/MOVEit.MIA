@@ -12,7 +12,7 @@
 RootModule = 'MOVEit.MIA.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.3.0'
+ModuleVersion = '0.3.1'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -75,10 +75,28 @@ FormatsToProcess = @('Format\MIA.Format.ps1xml', 'Format\MIALog.Format.ps1xml')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @(
-    'Get-MIAAudit','Get-MIAFileActivity','Get-MIATaskRun','Connect-MIAServer',
-    'Disconnect-MIAServer','Get-MIAHost','Get-MIAInfo','Get-MIAPgpKey','Get-MIAReportAudit',
-    'Get-MIAReportFileActivity','Get-MIAReportTaskRun','Get-MIASshKey','Get-MIASSLCert','Get-MIATask',
-    'Get-MIATaskLog','Invoke-MIARestMethod','New-MIATask','Set-MIATask','Start-MIATask','Wait-MIATask',
+    'Get-MIAAudit'
+    'Get-MIAFileActivity'
+    'Get-MIATaskRun'
+    'Connect-MIAServer'
+    'Disconnect-MIAServer'
+    'Get-MIACustomScript'
+    'Get-MIAHost'
+    'Get-MIAInfo'
+    'Get-MIAPgpKey'
+    'Get-MIAReportAudit'
+    'Get-MIAReportFileActivity'
+    'Get-MIAReportTaskRun'
+    'Get-MIASshKey'
+    'Get-MIASSLCert'
+    'Get-MIATask'
+    'Get-MIATaskLog'
+    'Invoke-MIARestMethod'
+    'New-MIATask'
+    'Remove-MIATask'
+    'Set-MIATask'
+    'Start-MIATask'
+    'Wait-MIATask'
     'Invoke-MIAWebRequest'
 )
 
@@ -121,7 +139,7 @@ PrivateData = @{
         # ReleaseNotes = ''
 
         # Prerelease string of this module
-        # Prerelease = 'preview'
+        # Prerelease = 'alpha'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
