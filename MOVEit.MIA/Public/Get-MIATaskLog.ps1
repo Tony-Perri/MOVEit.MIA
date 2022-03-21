@@ -41,29 +41,14 @@ function Get-MIATaskLog {
     )
 
     try {   
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-         
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/tasks/$TaskId/log"
+        # Set the resource for this request
+        $resource = "tasks/$TaskId/log"
                     
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        }    
-
         # Send the request and write the response
         switch ($PSCmdlet.ParameterSetName) {
             'Detail' {
                 # This request is for text/plain
-                $headers['Accept'] = 'text/plain'
-                
-                $response = Invoke-RestMethod -Uri "$uri/$TaskLogId" -Headers $headers
-                Write-Output $response
+                Invoke-MIARequest -Resource "$resource/$TaskLogId" -Accept 'text/plain' -Context $Context
             }
             'List' {
                 $query = @{}
@@ -72,8 +57,8 @@ function Get-MIATaskLog {
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
-                $response = Invoke-RestMethod -Uri "$uri" -Headers $headers -Body $query 
-                $response | Write-MIAResponse -Typename "MIATaskLog" -IncludePaging:$IncludePaging
+                Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
+                    Write-MIAResponse -Typename "MIATaskLog" -IncludePaging:$IncludePaging
             }
         }
     }

@@ -17,3 +17,5 @@ $script:Context = @{
 }
 
 $script:DEFAULT_CONTEXT = 'Default'
+
+$script:USER_AGENT = 'MOVEit.MIA'

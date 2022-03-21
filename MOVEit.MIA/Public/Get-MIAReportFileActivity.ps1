@@ -137,23 +137,6 @@ function Get-MIAReportFileActivity {
     Write-Verbose $Predicate
 
     try {
-        # Confirm the token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-
-        # Build the request
-        $params = @{
-            Uri = "$($ctx.BaseUri)/reports/fileactivity"
-            Method = 'Post'
-            Headers = @{
-                Accept = 'application/json'
-                Authorization = "Bearer $($ctx.Token.AccessToken)"
-            }
-            ContentType = 'application/json'
-        }
-
         # Build the request body
         $body = @{
             predicate = "$Predicate"
@@ -161,12 +144,18 @@ function Get-MIAReportFileActivity {
             maxCount = "$MaxCount"
         } | ConvertTo-Json
 
-        # Invoke the request
-        $response = Invoke-RestMethod @params -Body $body
+        # Build the request
+        $params = @{
+            Resource = "reports/fileactivity"
+            Method = 'Post'
+            ContentType = 'application/json'
+            Body = $body
+            Context = $Context
+        }
         
-        # Add type to the items for better display from .format.ps1xml file and write
-        # to the pipeline
-        $response.items | foreach-object { $_.PSOBject.TypeNames.Insert(0, 'MIAReportFileActivity'); $_ }
+        # Invoke the request and write out the response
+        Invoke-MIARequest @params |
+            Write-MIAResponse -TypeName 'MIAReportFileActivity'
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

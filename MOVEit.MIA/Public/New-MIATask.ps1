@@ -16,20 +16,10 @@ function New-MIATask {
     )
 
     try {        
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-        
         # Build the request
         $params = @{
-            Uri = "$($ctx.BaseUri)/tasks"
+            Resource = "tasks"
             Method = 'Post'
-            Headers = @{
-                Accept = 'application/json'
-                Authorization = "Bearer $($ctx.Token.AccessToken)"
-            }
             ContentType = 'application/json'
         }
 
@@ -42,8 +32,8 @@ function New-MIATask {
         $body = $Task | ConvertTo-Json -Depth 10
 
         # Invoke the request
-        $response = Invoke-RestMethod @params -Body $body
-        $response | Write-MIAResponse -Typename "MIATask"
+        Invoke-MIARequest @params -Body $body -Context $Context |
+            Write-MIAResponse -Typename "MIATask"
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

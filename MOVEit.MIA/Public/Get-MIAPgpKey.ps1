@@ -40,26 +40,14 @@ function Get-MIAPgpKey {
     )
     
     try {   
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-        
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/pgpkeys"
-        
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        } 
+        # Set the resource for this request
+        $resource = "pgpkeys"
 
         # Send the request and write the response
         switch ($PSCmdlet.ParameterSetName) {
             'Detail' {
-                $response = Invoke-RestMethod -Uri "$uri/$PGPKeyId" -Headers $headers
-                $response | Write-MIAResponse -TypeName 'MIAPgpKey'
+                Invoke-MIARequest -Resource "$resource/$PGPKeyId" -Context $Context |
+                    Write-MIAResponse -TypeName 'MIAPgpKey'
             }
             'List' {
                 $query = @{}
@@ -69,8 +57,8 @@ function Get-MIAPgpKey {
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
-                $response = Invoke-RestMethod -Uri "$uri" -Headers $headers -Body $query
-                $response | Write-MIAResponse -Typename "MIAPgpKey" -IncludePaging:$IncludePaging
+                Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
+                    Write-MIAResponse -Typename "MIAPgpKey" -IncludePaging:$IncludePaging
             }
         }
     }

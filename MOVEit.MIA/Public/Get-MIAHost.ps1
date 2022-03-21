@@ -49,26 +49,14 @@ function Get-MIAHost {
     )
 
     try {
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/hosts"
+        # Set the resource for this request
+        $resource = "hosts"
                     
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        }    
-
         # Send the request and write the response
         switch ($PSCmdlet.ParameterSetName) {
             'Detail' {
-                $response = Invoke-RestMethod -Uri "$uri/$HostId" -Headers $headers
-                $response | Write-MIAResponse -TypeName 'MIAHostDetail'
+                Invoke-MIARequest -Resource "$resource/$HostId" -Context $Context |
+                    Write-MIAResponse -TypeName 'MIAHostDetail'
             }
             'List' {
                 $query = @{}
@@ -79,7 +67,7 @@ function Get-MIAHost {
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
-                $response = Invoke-RestMethod -Uri "$uri" -Headers $headers -Body $query                
+                $response = Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context
                 
                 # The JSON returned is a bit unique when parsed into a PSObject
                 # in that the "Type" becomes a property and then the actual object

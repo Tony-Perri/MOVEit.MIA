@@ -12,24 +12,12 @@ function Get-MIAInfo {
     )
 
     try {
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-    
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/info"
+        # Set the resource for this request
+        $resource = "info"
                     
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        } 
-
         # Send the request and output the response
-        $response = Invoke-RestMethod -Uri $uri -Headers $headers
-        $response | Write-MIAResponse -TypeName 'MIAInfo' 
+        Invoke-MIARequest -Resource $resource -Context $Context |
+            Write-MIAResponse -TypeName 'MIAInfo' 
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

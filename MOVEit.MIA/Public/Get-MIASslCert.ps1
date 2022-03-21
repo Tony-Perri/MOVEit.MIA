@@ -35,26 +35,14 @@ function Get-MIASSLCert {
     )
 
     try {   
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-        
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/sslcerts"
-        
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        } 
+        # Set the resource for this request
+        $resource = "sslcerts"
 
         # Send the request and write the response
         switch ($PSCmdlet.ParameterSetName) {
             'Detail' {
-                $response = Invoke-RestMethod -Uri "$uri/$SSLCertificateThumbprint" -Headers $headers
-                $response | Write-MIAResponse -TypeName 'MIASslCert'
+                Invoke-MIARequest -Resource "$resource/$SSLCertificateThumbprint" -Context $Context |
+                    Write-MIAResponse -TypeName 'MIASslCert'
             }
             'List' {
                 $query = @{}
@@ -64,8 +52,8 @@ function Get-MIASSLCert {
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
-                $response = Invoke-RestMethod -Uri "$uri" -Headers $headers -Body $query
-                $response | Write-MIAResponse -Typename "MIASslCert" -IncludePaging:$IncludePaging
+                Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
+                    Write-MIAResponse -Typename "MIASslCert" -IncludePaging:$IncludePaging
             }
         }
     }

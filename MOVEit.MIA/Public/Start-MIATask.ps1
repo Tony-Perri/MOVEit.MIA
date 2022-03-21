@@ -21,32 +21,16 @@ function Start-MIATask {
     )
         
     try {
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-        
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/tasks"
-                    
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        } 
-
         # Setup the params to splat to IRM
         $irmParams = @{
-            Uri = "$uri/$TaskId/start"
+            Resource = "tasks/$TaskId/start"
             Method = 'Post'
-            Headers = $headers
             ContentType = 'application/json'
             Body = ($Params | ConvertTo-Json)
         }
 
         # Send the request and write out the response
-        $response = Invoke-RestMethod @irmParams
+        $response = Invoke-MIARequest @irmParams -Context $Context
 
         # Add the TaskId to the response to facilitate piping to other commands
         $response | Add-Member -MemberType NoteProperty -Name taskId -Value $TaskId

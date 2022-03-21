@@ -17,25 +17,14 @@ function Remove-MIATask {
     )
 
     try {        
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-        
         # Build the request
         $params = @{
-            Uri = "$($ctx.BaseUri)/tasks/$TaskId"
+            Resource = "tasks/$TaskId"
             Method = 'Delete'
-            Headers = @{
-                Accept = 'application/json'
-                Authorization = "Bearer $($ctx.Token.AccessToken)"
-            }            
         }
 
         # Invoke the request
-        $response = Invoke-RestMethod @params
-        $response
+        Invoke-MIARequest @params -Context $Context
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

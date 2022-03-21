@@ -23,27 +23,12 @@ function Invoke-MIARestMethod {
     )
 
     try {
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/$Resource"
-                    
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        } 
-
         # Additonal params that will be splatted
         $irmParams = @{}
         if ($Query) { $irmParams['Body'] = $Query}
 
-        $response = Invoke-RestMethod -Uri $uri -Headers $headers @irmParams
-        $response | Write-MIAResponse -TypeName 'MIAGeneric' -IncludePaging:$IncludePaging
+        Invoke-MIARequest -Resource $Resource @irmParams -Context $Context |
+            Write-MIAResponse -TypeName 'MIAGeneric' -IncludePaging:$IncludePaging
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

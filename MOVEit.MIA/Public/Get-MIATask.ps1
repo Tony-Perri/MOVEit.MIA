@@ -57,26 +57,14 @@ function Get-MIATask {
     )
 
     try {
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/tasks"
-                    
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        }    
+        # Set the resourse for this request
+        $resource = "tasks"
         
         # Send the request and write the response
         switch ($PSCmdlet.ParameterSetName) {
             'Detail' {
-                $response = Invoke-RestMethod -Uri "$uri/$TaskId" -Headers $headers
-                $response | Write-MIAResponse -TypeName 'MIATaskDetail'
+                Invoke-MIARequest -Resource "$resource/$TaskId" -Context $Context |
+                    Write-MIAResponse -TypeName 'MIATaskDetail'
             }
             'Running' {
                 $query = @{}
@@ -86,8 +74,8 @@ function Get-MIATask {
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
-                $response = Invoke-RestMethod -Uri "$uri/running" -Headers $headers -Body $query
-                $response | Write-MIAResponse -Typename "MIATaskRunning" -IncludePaging:$IncludePaging
+                Invoke-MIARequest -Resource "$resource/running" -Body $query -Context $Context |
+                    Write-MIAResponse -Typename "MIATaskRunning" -IncludePaging:$IncludePaging
             }
             'List' {
                 $query = @{}
@@ -97,8 +85,8 @@ function Get-MIATask {
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
-                $response = Invoke-RestMethod -Uri "$uri" -Headers $headers -Body $query
-                $response | Write-MIAResponse -Typename "MIATask" -IncludePaging:$IncludePaging
+                Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
+                    Write-MIAResponse -Typename "MIATask" -IncludePaging:$IncludePaging
             }
         }
     }

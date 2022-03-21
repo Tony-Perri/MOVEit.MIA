@@ -1,5 +1,5 @@
 ## 0.3.2 -
-* 
+* Refactor calls to Invoke-RestMethod to Invoke-MIARequest
 ## 0.3.1 - March 2022
 * Fixed issue in Wait-MIATask on Windows PowerShell 5.1
 * Add Get-MIACustomScript command

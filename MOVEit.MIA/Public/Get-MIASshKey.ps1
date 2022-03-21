@@ -34,26 +34,14 @@ function Get-MIASshKey {
     )
     
     try {   
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
-        
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/sshkeys"
-        
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        } 
+        # Set the resource for this request
+        $resource = "sshkeys"
 
         # Send the request and write the response
         switch ($PSCmdlet.ParameterSetName) {
             'Detail' {
-                $response = Invoke-RestMethod -Uri "$uri/$SSHKeyId" -Headers $headers
-                $response | Write-MIAResponse -TypeName 'MIASshKey'
+                Invoke-MIARequest -Resource "$resource/$SSHKeyId" -Context $Context |
+                    Write-MIAResponse -TypeName 'MIASshKey'
             }
             'List' {
                 $query = @{}
@@ -63,8 +51,8 @@ function Get-MIASshKey {
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
-                $response = Invoke-RestMethod -Uri "$uri" -Headers $headers -Body $query
-                $response | Write-MIAResponse -Typename "MIASshKey" -IncludePaging:$IncludePaging
+                Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
+                    Write-MIAResponse -Typename "MIASshKey" -IncludePaging:$IncludePaging
             }
         }
     }

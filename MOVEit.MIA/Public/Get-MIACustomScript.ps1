@@ -34,26 +34,14 @@ function Get-MIACustomScript {
     )
     
     try {   
-        # Confirm the Token, refreshing if necessary
-        Confirm-MIAToken -Context $Context
-
-        # Get the context
-        $ctx = Get-MIAContext -Context $Context
+        # Set the resource for this request
+        $resource = "customscripts"
         
-        # Set the Uri for this request
-        $uri = "$($ctx.BaseUri)/customscripts"
-        
-        # Set the request headers
-        $headers = @{
-            Accept = "application/json"
-            Authorization = "Bearer $($ctx.Token.AccessToken)"
-        } 
-
         # Send the request and write the response
         switch ($PSCmdlet.ParameterSetName) {
             'Detail' {
-                $response = Invoke-RestMethod -Uri "$uri/$ScriptId" -Headers $headers
-                $response | Write-MIAResponse -TypeName 'MIACustomScript'
+                Invoke-MIARequest -Resource "$resource/$ScriptId" -Context $Context |
+                    Write-MIAResponse -TypeName 'MIACustomScript'
             }
             'List' {
                 $query = @{}
@@ -63,8 +51,8 @@ function Get-MIACustomScript {
                     Page { $query['page'] = $Page }
                     PerPage { $query['perPage'] = $PerPage }
                 }
-                $response = Invoke-RestMethod -Uri "$uri" -Headers $headers -Body $query
-                $response | Write-MIAResponse -Typename "MIACustomScript" -IncludePaging:$IncludePaging
+                Invoke-MIARequest -Resource "$resource" -Context $Context -Body $query |
+                    Write-MIAResponse -Typename "MIACustomScript" -IncludePaging:$IncludePaging
             }
         }
     }
