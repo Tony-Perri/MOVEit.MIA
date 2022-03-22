@@ -24,7 +24,7 @@ function Invoke-MIAWebRequest {
         Confirm-MIAToken -Context $Context
 
         # Get the context
-        $ctx = Get-MIAContext -Context $Context
+        $ctx = $script:Context[$Context]
 
         # Set the Uri for this request
         $uri = "$($ctx.BaseUri)/$Resource"
