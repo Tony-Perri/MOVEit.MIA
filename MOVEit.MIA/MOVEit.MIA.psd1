@@ -68,7 +68,7 @@ PowerShellVersion = '5.1'
 # TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = @('Format\MIA.Format.ps1xml', 'Format\MIALog.Format.ps1xml')
+FormatsToProcess = @('MOVEit.MIA.Format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()
