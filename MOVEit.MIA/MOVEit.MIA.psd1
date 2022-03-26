@@ -98,6 +98,7 @@ FunctionsToExport = @(
     'Set-MIATask'
     'Start-MIATask'
     'Start-MIATaskScheduler'
+    'Stop-MIATask'
     'Stop-MIATaskScheduler'
     'Wait-MIATask'
     'Invoke-MIAWebRequest'
