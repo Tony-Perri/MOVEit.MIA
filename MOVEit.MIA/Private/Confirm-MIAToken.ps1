@@ -49,6 +49,12 @@ function Confirm-MIAToken {
                 Body = "grant_type=refresh_token&refresh_token=$($ctx.Token.RefreshToken)"
                 Headers = @{Accept = "application/json"}
             }
+
+            # Add SkipCertificateCheck parameter if set
+            if ($ctx.SkipCertificateCheck) {
+                $params['SkipCertificateCheck'] = $true
+                Write-Verbose "SkipCertificateCheck: $true"
+            }
             
             $response = Invoke-RestMethod @params
             if ($response.access_token) {
