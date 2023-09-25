@@ -28,6 +28,10 @@ function Connect-MIAServer {
         # Credentials
         [Parameter(Mandatory=$true)]
         [pscredential]$Credential,
+
+        # ServerHost
+        [Parameter(Mandatory=$false)]
+        [string]$ServerHost,
         
         # Context
         [Parameter(Mandatory=$false)]
@@ -50,11 +54,19 @@ function Connect-MIAServer {
             Headers = @{Accept = "application/json"} 
             UserAgent = 'MOVEit REST API'           
         }
-        $response = @{
+        
+        # Build the request body
+        $body = @{
             grant_type = 'password'
             username = $Credential.UserName
             password= $Credential.GetNetworkCredential().Password
-            } | Invoke-RestMethod -Uri $uri @params
+        }
+
+        if ($PSBoundParameters.ContainsKey('ServerHost')) {
+            $body['server_host'] = $ServerHost
+        }
+
+        $response = Invoke-RestMethod -Uri $uri -Body $body @params
 
         if ($response.access_token) {
             $ctx.Token = @{                    

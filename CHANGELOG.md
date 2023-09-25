@@ -1,5 +1,5 @@
 ## 0.3.3 - 
-* 
+* Add `ServerHost` parameter to `Connect-MIAServer`
 ## 0.3.2 - June 2022
 * Refactor calls to Invoke-RestMethod to Invoke-MIARequest
 * Consolidate .Format.ps1xml file
