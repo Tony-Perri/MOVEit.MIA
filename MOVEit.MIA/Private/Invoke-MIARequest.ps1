@@ -50,7 +50,7 @@ function Invoke-MIARequest {
             }
             UserAgent = $script:USER_AGENT
         }
-
+        
         # if ($Method -in ([WebRequestMethod]::Post, [WebRequestMethod]::Put, [WebRequestMethod]::Patch)) {
         #     if ($PSBoundParameters.ContainsKey('Body')) {
         #         # ToDo: Set the ContentType based on the Request Method and maybe do the
@@ -68,6 +68,12 @@ function Invoke-MIARequest {
         Write-Verbose "Method: $($irmParams.Method)"
         Write-Verbose "Accept: $($irmParams.Headers.Accept)"
         Write-Verbose "ContentType: $($irmParams.ContentType)"        
+
+        # Add SkipCertificateCheck parameter if set
+        if ($ctx.SkipCertificateCheck) {
+            $irmParams['SkipCertificateCheck'] = $true
+            Write-Verbose "SkipCertificateCheck: $true"
+        }
 
         # Send the request and write out the response
         Invoke-RestMethod @irmParams

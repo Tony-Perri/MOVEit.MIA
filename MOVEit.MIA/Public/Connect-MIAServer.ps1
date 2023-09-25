@@ -36,7 +36,11 @@ function Connect-MIAServer {
         # Context
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [string]$Context = $script:DEFAULT_CONTEXT
+        [string]$Context = $script:DEFAULT_CONTEXT,
+
+        # SkipCertificateCheck
+        [Parameter()]
+        [switch]$SkipCertificateCheck
     )     
     
     try {   
@@ -44,6 +48,21 @@ function Connect-MIAServer {
         $ctx = @{
             Token = @()
             BaseUri = "https://$Hostname/api/v1"
+            SkipCertificateCheck = $false
+        }
+
+        # Determine if SkipCertificateCheck parameter is specified
+        if ($SkipCertificateCheck) {
+            if ($PSVersionTable.PSVersion.Major -ge 6) {
+                Write-Warning "SkipCertificateCheck is not secure and is not recommended. "
+                Write-Warning ("This switch is only intended to be used against known hosts " +
+                              "using a self-signed certificate for testing purposes.") 
+                Write-Warning "Use at your own risk."
+                $ctx.SkipCertificateCheck = $true                              
+            }
+            else {
+                Write-Error "SkipCertificateCheck requires PowerShell 6 or later" -ErrorAction Stop
+            }
         }
         
         # Build the request
@@ -55,6 +74,11 @@ function Connect-MIAServer {
             UserAgent = 'MOVEit REST API'           
         }
         
+        # Add SkipCertificateCheck parameter if set
+        if ($ctx.SkipCertificateCheck) {
+            $params['SkipCertificateCheck'] = $true
+        }
+
         # Build the request body
         $body = @{
             grant_type = 'password'
