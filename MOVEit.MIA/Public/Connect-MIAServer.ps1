@@ -105,6 +105,10 @@ function Connect-MIAServer {
 
             Write-Output "[$Context]: Connected to MOVEit Automation server $Hostname"
         }
+    }
+    catch [System.Net.Http.HttpRequestException], [System.Net.WebException] {
+        # Format ErrorDetails which contains the JSON response from the REST API
+        $PSCmdlet.ThrowTerminatingError((Format-RestErrorDetails $PSItem))
     } 
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

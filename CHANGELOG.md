@@ -1,6 +1,7 @@
 ## 0.3.3 - 
 * Add `ServerHost` parameter to `Connect-MIAServer`
 * Add support for -SkipCertificateCheck
+* Format RestApi error details rather than the raw json (still want to add a try/catch before release.)
 ## 0.3.2 - June 2022
 * Refactor calls to Invoke-RestMethod to Invoke-MIARequest
 * Consolidate .Format.ps1xml file
