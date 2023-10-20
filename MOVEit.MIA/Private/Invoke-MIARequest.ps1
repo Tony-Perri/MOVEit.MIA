@@ -12,6 +12,10 @@ function Invoke-MIARequest {
         [Parameter(Mandatory,
                     Position=0)]
         [string]$Resource,
+
+        [Parameter()]
+        [ValidateSet('v1','v0')]
+        [string]$ApiVersion = 'v1',
         
         [Parameter()]
         [WebRequestMethod]$Method = [WebRequestMethod]::Get,
@@ -58,10 +62,11 @@ function Invoke-MIARequest {
         #     }
         # }
 
-        # Add any add'l params that were passed in
+        # Add any add'l params that were passed in and/or change the ApiVersion in the Url
         switch ($PSBoundParameters.Keys) {
-            ContentType      { $irmParams['ContentType']      = $ContentType }
-            Body             { $irmParams['Body']             = $Body }
+            ContentType      { $irmParams['ContentType'] = $ContentType }
+            Body             { $irmParams['Body']        = $Body }
+            ApiVersion       { $irmParams.Uri            = $irmParams.Uri -replace 'api/v1', "api/$ApiVersion"}
         }
 
         Write-Verbose "Uri: $($irmParams.Uri)"
