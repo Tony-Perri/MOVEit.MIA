@@ -7,7 +7,7 @@ function Format-RestErrorDetails{
     )
 
     # Reformat ErrorDetails which contains the JSON response from the REST API    
-    # try {
+    try {
         # Check if there actually is a message
         if ($ErrorRecord.ErrorDetails.Message) {
             # ...and check if we think it is a message we can reformat
@@ -26,10 +26,10 @@ function Format-RestErrorDetails{
                 )
             }
         }
-    # }
-    # catch {
+    }
+    catch {
         # Just eat whatever exception happened and return the original error record
-    # }
+    }
     
     $ErrorRecord
 }

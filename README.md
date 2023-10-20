@@ -1,5 +1,5 @@
 # MOVEit.MIA
-MOVEit.MIA is a PowerShell module for using the [MOVEit Automation REST API](https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html).  *Please note: This is currently a work-in-progress and not all endpoints have been implemented.*
+MOVEit.MIA is a PowerShell module for using the [MOVEit Automation REST API](https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html).  *Please note: This is currently a work-in-progress and not all endpoints have been implemented.*
 
 ## Features
 - Powershell commands map, as much as possible, directly to REST API endpoints.
@@ -20,6 +20,10 @@ First, you'll need to connect to a MOVEit Automation server and authenticate:
 ```powershell
 Connect-MIAServer -Hostname '<your-automation-server' -Credential (Get-Credential)
 ```
+You can also just supply the username and get prompted for the password:
+```powershell
+Connect-MIAServer -Hostname '<your-automation-server' -Credential '<your-username>'
+```
 To avoid being prompted for credentials every time, do something like:
 ```powershell
 $params = @{
@@ -29,6 +33,10 @@ $params = @{
 }
 
 Connect-MIAServer @params
+```
+As of v0.3.3, for testing purposes, if you are using PowerShell 7, you can use the `-SkipCertificateCheck` parameter to avoid TLS errors when using a test or self-signed certificate:
+```powershell
+Connect-MIAServer -Hostname '<your-automation-server' -Credential '<your-username>' -SkipCertificateCheck
 ```
 Once connected, you can use any of the commands to invoke the cooresponding REST API endpoint.
 ```powershell

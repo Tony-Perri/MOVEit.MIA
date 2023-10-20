@@ -12,7 +12,7 @@ function Confirm-MIAToken {
         None.
     .LINK
         See link for /api/v1/token doc.
-        https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html#_authrequestauthtokenusingpost
+        https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html#_authrequestauthtokenusingpost
     #>    
     [CmdletBinding()]
     param (

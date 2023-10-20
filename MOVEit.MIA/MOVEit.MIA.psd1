@@ -34,7 +34,7 @@ Description = @'
 PowerShell Module for accessing the MOVEit Automation REST API
 
 For more information on the MOVEit Automation REST API, please visit the following:
-https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html
+https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html
 '@
 
 # Minimum version of the PowerShell engine required by this module
@@ -143,7 +143,7 @@ PrivateData = @{
         # ReleaseNotes = ''
 
         # Prerelease string of this module
-        Prerelease = 'alpha'
+        # Prerelease = 'alpha'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false

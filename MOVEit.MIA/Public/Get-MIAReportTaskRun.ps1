@@ -20,7 +20,7 @@ function Get-MIAReportTaskRun {
         Collection of task run records as custom MIAReportTaskRun objects.
     .LINK
         See link for /api/v1/reports/taskruns doc.
-        https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html#_gettaskrunsreportusingpost.
+        https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html#_gettaskrunsreportusingpost.
     .NOTES
         Calls Confirm-MIAToken to auto-refresh token.
         Use -verbose parameter to see the rsql predicate.        

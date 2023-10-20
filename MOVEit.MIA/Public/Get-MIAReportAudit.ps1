@@ -21,7 +21,7 @@ function Get-MIAReportAudit
         Collection of audit records as custom MIAReportAudit objects.
     .LINK
         See link for /api/v1/reports/audit doc.
-        https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html#_getauditreportusingpost
+        https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html#_getauditreportusingpost
     .NOTES
         Calls Confirm-MIAToken to auto-refresh token.
         Use -verbose parameter to see the rsql predicate.        
