@@ -13,6 +13,7 @@ $script:Context = @{
     Default = @{
         BaseUri = ''
         Token = @()
+        SkipCertificateCheck = $false
     }
 }
 

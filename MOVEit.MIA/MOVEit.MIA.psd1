@@ -12,7 +12,7 @@
 RootModule = 'MOVEit.MIA.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.3.2'
+ModuleVersion = '0.3.3'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -34,7 +34,7 @@ Description = @'
 PowerShell Module for accessing the MOVEit Automation REST API
 
 For more information on the MOVEit Automation REST API, please visit the following:
-https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html
+https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html
 '@
 
 # Minimum version of the PowerShell engine required by this module

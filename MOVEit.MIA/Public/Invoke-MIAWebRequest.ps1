@@ -39,6 +39,12 @@ function Invoke-MIAWebRequest {
         $irmParams = @{}
         if ($Query) { $irmParams['Body'] = $Query}
 
+        # Add SkipCertificateCheck parameter if set
+        if ($ctx.SkipCertificateCheck) {
+            $irmParams['SkipCertificateCheck'] = $true
+            Write-Verbose "SkipCertificateCheck: $true"
+        }
+        
         # If this is PowerShell 7, lets add the -SkipHttpErrorCheck param
         if ($PSVersionTable.PSVersion.Major -ge 7) { $irmParams['SkipHttpErrorCheck'] = $true}
 

@@ -31,7 +31,10 @@ function Write-MIAResponse {
     # to the pipeline
     if ($Response.psobject.properties['items']) {
         if ($TypeName) {
-            $Response.items | foreach-object { $_.PSOBject.TypeNames.Insert(0,$TypeName) }
+            # $Response.items | foreach-object { $_.PSOBject.TypeNames.Insert(0,$TypeName) }
+            foreach ($item in $Response.items) {
+                $item.PSOBject.TypeNames.Insert(0,$TypeName)
+            }
         }
         $Response.items
     }

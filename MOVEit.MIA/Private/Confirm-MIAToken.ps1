@@ -12,7 +12,7 @@ function Confirm-MIAToken {
         None.
     .LINK
         See link for /api/v1/token doc.
-        https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html#_authrequestauthtokenusingpost
+        https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html#_authrequestauthtokenusingpost
     #>    
     [CmdletBinding()]
     param (
@@ -48,6 +48,12 @@ function Confirm-MIAToken {
                 ContentType = 'application/x-www-form-urlencoded'
                 Body = "grant_type=refresh_token&refresh_token=$($ctx.Token.RefreshToken)"
                 Headers = @{Accept = "application/json"}
+            }
+
+            # Add SkipCertificateCheck parameter if set
+            if ($ctx.SkipCertificateCheck) {
+                $params['SkipCertificateCheck'] = $true
+                Write-Verbose "SkipCertificateCheck: $true"
             }
             
             $response = Invoke-RestMethod @params

@@ -1,3 +1,9 @@
+## 0.3.3 - October 2023
+* Add `ServerHost` parameter to `Connect-MIAServer`
+* Add support for -SkipCertificateCheck
+* Format RestApi error details rather than the raw json
+* Add `-Force` parameter to `Stop-MIATask`
+* Updated help links to Automation2023 API documentation
 ## 0.3.2 - June 2022
 * Refactor calls to Invoke-RestMethod to Invoke-MIARequest
 * Consolidate .Format.ps1xml file

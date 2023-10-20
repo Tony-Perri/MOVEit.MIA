@@ -40,9 +40,18 @@ function Disconnect-MIAServer {
             Body        =  $body
         }
 
+        # Add SkipCertificateCheck parameter if set
+        if ($ctx.SkipCertificateCheck) {
+            $irmParams['SkipCertificateCheck'] = $true
+        }
+
         # Send the request and output the response
         Invoke-RestMethod @irmParams | Out-Null
         Write-Output "[$Context]: Disconnected from MOVEit Automation server"
+    }
+    catch [System.Net.Http.HttpRequestException], [System.Net.WebException] {
+        # Format ErrorDetails which contains the JSON response from the REST API
+        $PSCmdlet.ThrowTerminatingError((Format-RestErrorDetails $PSItem))
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

@@ -17,7 +17,7 @@ function Connect-MIAServer {
         String message if connected.
     .LINK
         See link for /api/v1/token doc.
-        https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html#_authrequestauthtokenusingpost
+        https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html#_authrequestauthtokenusingpost
     #>
     [CmdletBinding()]
     param (      
@@ -28,11 +28,19 @@ function Connect-MIAServer {
         # Credentials
         [Parameter(Mandatory=$true)]
         [pscredential]$Credential,
+
+        # ServerHost
+        [Parameter(Mandatory=$false)]
+        [string]$ServerHost,
         
         # Context
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [string]$Context = $script:DEFAULT_CONTEXT
+        [string]$Context = $script:DEFAULT_CONTEXT,
+
+        # SkipCertificateCheck
+        [Parameter()]
+        [switch]$SkipCertificateCheck
     )     
     
     try {   
@@ -40,6 +48,21 @@ function Connect-MIAServer {
         $ctx = @{
             Token = @()
             BaseUri = "https://$Hostname/api/v1"
+            SkipCertificateCheck = $false
+        }
+
+        # Determine if SkipCertificateCheck parameter is specified
+        if ($SkipCertificateCheck) {
+            if ($PSVersionTable.PSVersion.Major -ge 6) {
+                Write-Warning "SkipCertificateCheck is not secure and is not recommended. "
+                Write-Warning ("This switch is only intended to be used against known hosts " +
+                              "using a self-signed certificate for testing purposes.") 
+                Write-Warning "Use at your own risk."
+                $ctx.SkipCertificateCheck = $true                              
+            }
+            else {
+                Write-Error "SkipCertificateCheck requires PowerShell 6 or later" -ErrorAction Stop
+            }
         }
         
         # Build the request
@@ -50,11 +73,24 @@ function Connect-MIAServer {
             Headers = @{Accept = "application/json"} 
             UserAgent = 'MOVEit REST API'           
         }
-        $response = @{
+        
+        # Add SkipCertificateCheck parameter if set
+        if ($ctx.SkipCertificateCheck) {
+            $params['SkipCertificateCheck'] = $true
+        }
+
+        # Build the request body
+        $body = @{
             grant_type = 'password'
             username = $Credential.UserName
             password= $Credential.GetNetworkCredential().Password
-            } | Invoke-RestMethod -Uri $uri @params
+        }
+
+        if ($PSBoundParameters.ContainsKey('ServerHost')) {
+            $body['server_host'] = $ServerHost
+        }
+
+        $response = Invoke-RestMethod -Uri $uri -Body $body @params
 
         if ($response.access_token) {
             $ctx.Token = @{                    
@@ -69,6 +105,10 @@ function Connect-MIAServer {
 
             Write-Output "[$Context]: Connected to MOVEit Automation server $Hostname"
         }
+    }
+    catch [System.Net.Http.HttpRequestException], [System.Net.WebException] {
+        # Format ErrorDetails which contains the JSON response from the REST API
+        $PSCmdlet.ThrowTerminatingError((Format-RestErrorDetails $PSItem))
     } 
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

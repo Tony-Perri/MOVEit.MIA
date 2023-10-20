@@ -20,7 +20,7 @@ function Get-MIAReportFileActivity {
         Collection of file activity records as custom MIAReportFileActivity objects.
     .LINK
         See link for /api/v1/reports/fileactivity doc.
-        https://docs.ipswitch.com/MOVEit/Automation2020/API/REST-API/index.html#_getfileactivityreportusingpost.
+        https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html#_getfileactivityreportusingpost.
     .NOTES
         Calls Confirm-MIAToken to auto-refresh token.
         Use -verbose parameter to see the rsql predicate.        

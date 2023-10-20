@@ -12,6 +12,10 @@ function Invoke-MIARequest {
         [Parameter(Mandatory,
                     Position=0)]
         [string]$Resource,
+
+        [Parameter()]
+        [ValidateSet('v1','v0')]
+        [string]$ApiVersion = 'v1',
         
         [Parameter()]
         [WebRequestMethod]$Method = [WebRequestMethod]::Get,
@@ -50,7 +54,7 @@ function Invoke-MIARequest {
             }
             UserAgent = $script:USER_AGENT
         }
-
+        
         # if ($Method -in ([WebRequestMethod]::Post, [WebRequestMethod]::Put, [WebRequestMethod]::Patch)) {
         #     if ($PSBoundParameters.ContainsKey('Body')) {
         #         # ToDo: Set the ContentType based on the Request Method and maybe do the
@@ -58,10 +62,11 @@ function Invoke-MIARequest {
         #     }
         # }
 
-        # Add any add'l params that were passed in
+        # Add any add'l params that were passed in and/or change the ApiVersion in the Url
         switch ($PSBoundParameters.Keys) {
-            ContentType      { $irmParams['ContentType']      = $ContentType }
-            Body             { $irmParams['Body']             = $Body }
+            ContentType      { $irmParams['ContentType'] = $ContentType }
+            Body             { $irmParams['Body']        = $Body }
+            ApiVersion       { $irmParams.Uri            = $irmParams.Uri -replace 'api/v1', "api/$ApiVersion"}
         }
 
         Write-Verbose "Uri: $($irmParams.Uri)"
@@ -69,8 +74,18 @@ function Invoke-MIARequest {
         Write-Verbose "Accept: $($irmParams.Headers.Accept)"
         Write-Verbose "ContentType: $($irmParams.ContentType)"        
 
+        # Add SkipCertificateCheck parameter if set
+        if ($ctx.SkipCertificateCheck) {
+            $irmParams['SkipCertificateCheck'] = $true
+            Write-Verbose "SkipCertificateCheck: $true"
+        }
+
         # Send the request and write out the response
         Invoke-RestMethod @irmParams
+    }
+    catch [System.Net.Http.HttpRequestException], [System.Net.WebException] {
+        # Format ErrorDetails which contains the JSON response from the REST API
+        $PSCmdlet.ThrowTerminatingError((Format-RestErrorDetails $PSItem))
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)
