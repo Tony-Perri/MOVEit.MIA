@@ -1,3 +1,5 @@
+## 0.3.4 -
+* 
 ## 0.3.3 - October 2023
 * Add `ServerHost` parameter to `Connect-MIAServer`
 * Add support for -SkipCertificateCheck
