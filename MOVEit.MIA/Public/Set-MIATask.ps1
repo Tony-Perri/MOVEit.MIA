@@ -26,7 +26,7 @@ function Set-MIATask {
             Resource = "tasks/$TaskId"
             Method = 'Put'
             ContentType = 'application/json'
-            Body = ($Task | ConvertTo-Json -Depth 10)
+            Body = ($Task | ConvertTo-Json -Depth 20)
         }
 
         # Invoke the request
