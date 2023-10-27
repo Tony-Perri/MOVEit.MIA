@@ -1,5 +1,11 @@
 ## 0.3.4 -
-* 
+* Add `Get-MIAResourceGroup`
+* Add Description to `Get-MIATask` output
+* Add `Get-MIAUserGroup`
+* Add `Select-MIATaskStep` to select specific stepType(s) from Task objects, especially Advanced Tasks
+* Add `*-MIAResourceGroupAcl` functions
+* Add `Get-MIAStandardScript` function
+*
 ## 0.3.3 - October 2023
 * Add `ServerHost` parameter to `Connect-MIAServer`
 * Add support for -SkipCertificateCheck
