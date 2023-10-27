@@ -5,6 +5,7 @@
 * Add `Select-MIATaskStep` to select specific stepType(s) from Task objects, especially Advanced Tasks
 * Add `*-MIAResourceGroupAcl` functions
 * Add `Get-MIAStandardScript` function
+* Add `Get-MIADateList` function
 *
 ## 0.3.3 - October 2023
 * Add `ServerHost` parameter to `Connect-MIAServer`
