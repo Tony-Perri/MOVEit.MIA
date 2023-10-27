@@ -82,6 +82,7 @@ FunctionsToExport = @(
     'Disconnect-MIAServer'
     'Get-MIACustomScript'
     'Get-MIADateList'
+    'Get-MIAGlobalParameter'
     'Get-MIAHost'
     'Get-MIAInfo'
     'Get-MIAPgpKey'

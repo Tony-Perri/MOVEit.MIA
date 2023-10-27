@@ -6,6 +6,7 @@
 * Add `*-MIAResourceGroupAcl` functions
 * Add `Get-MIAStandardScript` function
 * Add `Get-MIADateList` function
+* Add `Get-GlobalParameter` function
 *
 ## 0.3.3 - October 2023
 * Add `ServerHost` parameter to `Connect-MIAServer`
