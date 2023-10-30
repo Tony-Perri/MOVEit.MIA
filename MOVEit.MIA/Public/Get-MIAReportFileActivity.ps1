@@ -17,7 +17,7 @@ function Get-MIAReportFileActivity {
     .INPUTS
         None.
     .OUTPUTS
-        Collection of file activity records as custom MIAReportFileActivity objects.
+        Collection of file activity records as custom MOVEit.MIA.ReportFileActivity objects.
     .LINK
         See link for /api/v1/reports/fileactivity doc.
         https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html#_getfileactivityreportusingpost.
@@ -26,6 +26,7 @@ function Get-MIAReportFileActivity {
         Use -verbose parameter to see the rsql predicate.        
     #>
     [CmdletBinding(DefaultParameterSetName='Predicate')]
+    [OutputType('MOVEit.MIA.ReportFileActivity')]
     param (
         # predicate for REST call
         [Parameter(Mandatory=$false, ParameterSetName='Predicate')]
@@ -139,23 +140,23 @@ function Get-MIAReportFileActivity {
     try {
         # Build the request body
         $body = @{
-            predicate = "$Predicate"
-            orderBy = "$OrderBy"
-            maxCount = "$MaxCount"
+            predicate   = "$Predicate"
+            orderBy     = "$OrderBy"
+            maxCount    = "$MaxCount"
         } | ConvertTo-Json
 
         # Build the request
         $params = @{
-            Resource = "reports/fileactivity"
-            Method = 'Post'
+            Resource    = "reports/fileactivity"
+            Method      = 'Post'
             ContentType = 'application/json'
-            Body = $body
-            Context = $Context
+            Body        = $body
+            Context     = $Context
         }
         
         # Invoke the request and write out the response
         Invoke-MIARequest @params |
-            Write-MIAResponse -TypeName 'MIAReportFileActivity'
+            Write-MIAResponse -TypeName 'MOVEit.MIA.ReportFileActivity'
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

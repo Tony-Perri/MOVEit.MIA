@@ -4,7 +4,7 @@
     <View>
       <Name>MIAHost</Name>
       <ViewSelectedBy>
-        <TypeName>MIAHost</TypeName>
+        <TypeName>MOVEit.MIA.Host</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -55,7 +55,7 @@
     <View>
       <Name>MIATask</Name>
       <ViewSelectedBy>
-        <TypeName>MIATask</TypeName>
+        <TypeName>MOVEit.MIA.Task</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -99,7 +99,7 @@
     <View>
       <Name>MIATaskRunning</Name>
       <ViewSelectedBy>
-        <TypeName>MIATaskRunning</TypeName>
+        <TypeName>MOVEit.MIA.TaskRunning</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -224,7 +224,7 @@
     <View>
       <Name>MIATaskLog</Name>
       <ViewSelectedBy>
-        <TypeName>MIATaskLog</TypeName>
+        <TypeName>MOVEit.MIA.TaskLog</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -269,7 +269,7 @@
     <View>
       <Name>MIAPgpKey</Name>
       <ViewSelectedBy>
-        <TypeName>MIAPgpKey</TypeName>
+        <TypeName>MOVEit.MIA.PgpKey</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -321,7 +321,7 @@
     <View>
       <Name>MIASshKey</Name>
       <ViewSelectedBy>
-        <TypeName>MIASshKey</TypeName>
+        <TypeName>MOVEit.MIA.SshKey</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -358,7 +358,7 @@
     <View>
       <Name>MIASslCert</Name>
       <ViewSelectedBy>
-        <TypeName>MIASslCert</TypeName>
+        <TypeName>MOVEit.MIA.SslCert</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -395,8 +395,8 @@
     <View>
       <Name>MIACustomScript</Name>
       <ViewSelectedBy>
-        <TypeName>MIAStandardScript</TypeName>
-        <TypeName>MIACustomScript</TypeName>
+        <TypeName>MOVEit.MIA.StandardScript</TypeName>
+        <TypeName>MOVEit.MIA.CustomScript</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -480,7 +480,7 @@
       <Name>MIAPaging</Name>
       <OutOfBand />        
       <ViewSelectedBy>
-        <TypeName>MIAPaging</TypeName>
+        <TypeName>MOVEit.MIA.Paging</TypeName>
       </ViewSelectedBy>
       <CustomControl>     
         <CustomEntries>
@@ -511,7 +511,7 @@
     <View>
       <Name>MIAReportTaskRun</Name>
       <ViewSelectedBy>
-        <TypeName>MIAReportTaskRun</TypeName>
+        <TypeName>MOVEit.MIA.ReportTaskRun</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -593,7 +593,7 @@
     <View>
       <Name>MIAReportTaskRunByTask</Name>
       <ViewSelectedBy>
-        <TypeName>MIAReportTaskRun</TypeName>
+        <TypeName>MOVEit.MIA.ReportTaskRun</TypeName>
       </ViewSelectedBy>
       <GroupBy>
         <PropertyName>TaskName</PropertyName>
@@ -671,7 +671,7 @@
     <View>
       <Name>MIAReportFileActivity</Name>
       <ViewSelectedBy>
-        <TypeName>MIAReportFileActivity</TypeName>
+        <TypeName>MOVEit.MIA.ReportFileActivity</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -752,7 +752,7 @@
     <View>
       <Name>MIAReportFileActivityByTaskrun</Name>
       <ViewSelectedBy>
-        <TypeName>MIAReportFileActivity</TypeName>
+        <TypeName>MOVEit.MIA.ReportFileActivity</TypeName>
       </ViewSelectedBy>
       <GroupBy>
         <Label>Task Run</Label>
@@ -835,7 +835,7 @@
     <View>
       <Name>MIAReportAudit</Name>
       <ViewSelectedBy>
-        <TypeName>MIAReportAudit</TypeName>
+        <TypeName>MOVEit.MIA.ReportAudit</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>

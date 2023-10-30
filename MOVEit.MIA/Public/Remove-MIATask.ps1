@@ -11,22 +11,24 @@ function Remove-MIATask {
         [string]$TaskId,
 
         # Context
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]$Context = $script:DEFAULT_CONTEXT
     )
 
-    try {        
-        # Build the request
-        $params = @{
-            Resource = "tasks/$TaskId"
-            Method = 'Delete'
-        }
+    process {
+        try {        
+            # Build the request
+            $params = @{
+                Resource = "tasks/$TaskId"
+                Method   = 'Delete'
+            }
 
-        # Invoke the request
-        Invoke-MIARequest @params -Context $Context
+            # Invoke the request
+            Invoke-MIARequest @params -Context $Context
+        }
+        catch {
+            $PSCmdlet.ThrowTerminatingError($PSItem)
+        }    
     }
-    catch {
-        $PSCmdlet.ThrowTerminatingError($PSItem)
-    }    
 }

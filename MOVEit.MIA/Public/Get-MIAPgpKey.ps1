@@ -4,33 +4,33 @@ function Get-MIAPgpKey {
         Get MOVEit Automation PGP Key(s)
     #>
     [CmdletBinding(DefaultParameterSetName='List')]
+    [OutputType('MOVEit.MIA.PgpKey')]
     param (
         [Parameter(Mandatory,
+                    Position = 0,
+                    ValueFromPipeline,
+                    ValueFromPipelineByPropertyName,
                     ParameterSetName='Detail')]
+        [ValidateNotNullOrEmpty()]                    
         [string]$PgpKeyId,
 
-        [Parameter(Mandatory=$false,
-                    ParameterSetName='List')]
+        [Parameter(ParameterSetName='List')]
         [string]$Uid,
 
-        [Parameter(Mandatory=$false,
-                    ParameterSetName='List')]
+        [Parameter(ParameterSetName='List')]
         [ValidateSet('ID','uid','PubPriv','KeyType','KeyLength',
                     'Expired','Revoked','Disabled','Created','Expires',
                     'Status','Fingerprint','SymAlg','xInExpirationRange',
                     IgnoreCase = $false)]
         [string[]]$Fields,
 
-        [Parameter(Mandatory=$false,
-                    ParameterSetName='List')]
+        [Parameter(ParameterSetName='List')]
         [int32]$Page,
 
-        [Parameter(Mandatory=$false,
-                    ParameterSetName='List')]
+        [Parameter(ParameterSetName='List')]
         [int32]$PerPage,
         
-        [Parameter(Mandatory=$false,
-                    ParameterSetName='List')]                         
+        [Parameter(ParameterSetName='List')]                         
         [switch]$IncludePaging,
 
         # Context
@@ -38,31 +38,38 @@ function Get-MIAPgpKey {
         [ValidateNotNullOrEmpty()]
         [string]$Context = $script:DEFAULT_CONTEXT
     )
-    
-    try {   
+
+    begin {
         # Set the resource for this request
         $resource = "pgpkeys"
 
-        # Send the request and write the response
-        switch ($PSCmdlet.ParameterSetName) {
-            'Detail' {
-                Invoke-MIARequest -Resource "$resource/$PGPKeyId" -Context $Context |
-                    Write-MIAResponse -TypeName 'MIAPgpKey'
-            }
-            'List' {
-                $query = @{}
-                switch ($PSBoundParameters.Keys) {
-                    Uid { $query['uid'] = $Uid }
-                    Fields { $query['fields'] = $Fields -join ',' }
-                    Page { $query['page'] = $Page }
-                    PerPage { $query['perPage'] = $PerPage }
+        # Set the typename for the output
+        $typeName = 'MOVEit.MIA.PgpKey'
+    }
+    
+    process {
+        try {   
+            # Send the request and write the response
+            switch ($PSCmdlet.ParameterSetName) {
+                'Detail' {
+                    Invoke-MIARequest -Resource "$resource/$PGPKeyId" -Context $Context |
+                        Write-MIAResponse -TypeName $typeName
                 }
-                Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
-                    Write-MIAResponse -Typename "MIAPgpKey" -IncludePaging:$IncludePaging
+                'List' {
+                    $query = @{}
+                    switch ($PSBoundParameters.Keys) {
+                        Uid     { $query['uid']     = $Uid }
+                        Fields  { $query['fields']  = $Fields -join ',' }
+                        Page    { $query['page']    = $Page }
+                        PerPage { $query['perPage'] = $PerPage }
+                    }
+                    Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
+                        Write-MIAResponse -Typename $typeName -IncludePaging:$IncludePaging
+                }
             }
         }
-    }
-    catch {
-        $PSCmdLet.ThrowTerminatingError($PSItem)
+        catch {
+            $PSCmdLet.ThrowTerminatingError($PSItem)
+        }
     }
 }

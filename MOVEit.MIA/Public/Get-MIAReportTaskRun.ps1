@@ -17,7 +17,7 @@ function Get-MIAReportTaskRun {
     .INPUTS
         None.
     .OUTPUTS
-        Collection of task run records as custom MIAReportTaskRun objects.
+        Collection of task run records as custom MOVEit.MIA.ReportTaskRun objects.
     .LINK
         See link for /api/v1/reports/taskruns doc.
         https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html#_gettaskrunsreportusingpost.
@@ -26,6 +26,7 @@ function Get-MIAReportTaskRun {
         Use -verbose parameter to see the rsql predicate.        
     #>
     [CmdletBinding(DefaultParameterSetName='Predicate')]
+    [OutputType('MOVEit.MIA.ReportTaskRun')]
     param (
         # predicate for REST call
         [Parameter(Mandatory=$false, ParameterSetName='Predicate')]
@@ -143,23 +144,23 @@ function Get-MIAReportTaskRun {
     try {        
         # Build the request body
         $body = @{
-            predicate = "$Predicate";
-            orderBy = "$OrderBy";
-            maxCount = "$MaxCount"
+            predicate   = "$Predicate";
+            orderBy     = "$OrderBy";
+            maxCount    = "$MaxCount"
         } | ConvertTo-Json
 
         # Build the request
         $params = @{
-            Resource = "reports/taskruns"
-            Method = 'Post'
+            Resource    = "reports/taskruns"
+            Method      = 'Post'
             ContentType = 'application/json'
-            Body = $body
-            Context = $Context
+            Body        = $body
+            Context     = $Context
         }
         
         # Invoke the request and write out the response
         Invoke-MIARequest @params |
-            Write-MIAResponse -TypeName 'MIAReportTaskRun'
+            Write-MIAResponse -TypeName 'MOVEit.MIA.ReportTaskRun'
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

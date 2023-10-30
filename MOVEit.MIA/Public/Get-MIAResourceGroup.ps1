@@ -8,6 +8,7 @@ function Get-MIAResourceGroup {
     param (
         [Parameter(Mandatory,
                     Position = 0,
+                    ValueFromPipeline,
                     ValueFromPipelineByPropertyName,
                     ParameterSetName='Detail')]
         [string]$ResourceGroupName,

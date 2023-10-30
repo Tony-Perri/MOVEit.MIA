@@ -4,36 +4,48 @@ function Set-MIATask {
         Update a MOVEit Automation Task
     #>
     [CmdletBinding()]
+    [OutputType('MOVEit.MIA.Task')]
     param (
         [Parameter(Mandatory,
                     ValueFromPipelineByPropertyName)]
-        [Alias('Id')]                    
+        [Alias('Id')]
         [string]$TaskId,
-
+        
         [Parameter(Mandatory,
                     ValueFromPipeline)]
+        [PSTypeName('MOVEit.MIA.Task')]
         [psobject]$Task,
 
         # Context
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]$Context = $script:DEFAULT_CONTEXT
     )
 
-    try {        
-        # Build the request
-        $params = @{
-            Resource = "tasks/$TaskId"
-            Method = 'Put'
-            ContentType = 'application/json'
-            Body = ($Task | ConvertTo-Json -Depth 20)
-        }
+    begin {
+        # Set the resource for this request
+        $resource = 'tasks'
 
-        # Invoke the request
-        Invoke-MIARequest @params -Context $Context |
-            Write-MIAResponse -Typename "MIATask"
+        # Set the typeName for the response
+        $typeName = 'MOVEit.MIA.Task'
     }
-    catch {
-        $PSCmdlet.ThrowTerminatingError($PSItem)
-    }    
+
+    process {
+        try {        
+            # Build the request
+            $params = @{
+                Resource    = "$resource/$TaskId"
+                Method      = 'Put'
+                ContentType = 'application/json'
+                Body        = ($Task | ConvertTo-Json -Depth 20)
+            }
+
+            # Invoke the request
+            Invoke-MIARequest @params -Context $Context |
+                Write-MIAResponse -Typename $typeName
+        }
+        catch {
+            $PSCmdlet.ThrowTerminatingError($PSItem)
+        }    
+    }
 }
