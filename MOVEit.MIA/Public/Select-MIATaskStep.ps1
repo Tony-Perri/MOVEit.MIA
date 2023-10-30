@@ -14,7 +14,7 @@ function Select-MiATaskStep {
         [Parameter()]
         [ValidateSet('Source', 'Process', 'Destination', 'NextAction', 
                      'Email', 'Comment', 'For', 'If', 'RunTask', 'UpdOrig')]
-        [string[]]$StepType = @('Source', 'Destination')
+        [string[]]$StepType = @('Source', 'Process', 'Destination', 'NextAction', 'Email', 'RunTask')
     )
 
     begin { 
