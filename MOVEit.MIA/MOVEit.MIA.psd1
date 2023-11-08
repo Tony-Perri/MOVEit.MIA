@@ -12,7 +12,7 @@
 RootModule = 'MOVEit.MIA.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.3.3'
+ModuleVersion = '0.3.4'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -81,20 +81,30 @@ FunctionsToExport = @(
     'Connect-MIAServer'
     'Disconnect-MIAServer'
     'Get-MIACustomScript'
+    'Get-MIADateList'
+    'Get-MIAGlobalParameter'
     'Get-MIAHost'
     'Get-MIAInfo'
     'Get-MIAPgpKey'
     'Get-MIAReportAudit'
     'Get-MIAReportFileActivity'
     'Get-MIAReportTaskRun'
+    'Get-MIAResourceGroup'
+    'Get-MIAResourceGroupAcl'
     'Get-MIASshKey'
     'Get-MIASSLCert'
+    'Get-MIAStandardScript'
     'Get-MIATask'
     'Get-MIATaskLog'
     'Get-MIATaskScheduler'
+    'Get-MIAUserGroup'
     'Invoke-MIARestMethod'
+    'New-MIAResourceGroupAcl'
     'New-MIATask'
+    'Remove-MIAResourceGroupAcl'
     'Remove-MIATask'
+    'Select-MIATaskStep'
+    'Set-MIAResourceGroupAcl'
     'Set-MIATask'
     'Start-MIATask'
     'Start-MIATaskScheduler'
@@ -143,7 +153,7 @@ PrivateData = @{
         # ReleaseNotes = ''
 
         # Prerelease string of this module
-        # Prerelease = 'alpha'
+        # Prerelease = 'develop'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false

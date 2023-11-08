@@ -70,11 +70,8 @@ Get-MIAReportTaskRun -StartTimeStart (Get-Date).Date -Status Success,Failure
 ## Running tasks
 The `Start-MIATask` and `Wait-MIATask` commands can be used to run a task and wait for it to complete.
 ```powershell
-# Name of the task to run
-$taskToRunName = 'RunFromAPI With Params'
-
-# Get the taskId by name
-$taskId = (Get-MIATask -Name $taskToRunName).Id
+# Get the task by name
+$task = Get-MIATask -Name 'RunFromAPI With Params'
 
 # Parameters for the task
 $taskParams = @{
@@ -82,7 +79,7 @@ $taskParams = @{
 }
 
 # Start the task
-$taskRun = Start-MIATask -TaskId $taskId -Params $taskParams
+$taskRun = $task | Start-MIATask -Params $taskParams
 
 # Wait for the task to complete
 $taskRunResults = $taskRun | Wait-MIATask -Timeout 30
@@ -97,9 +94,18 @@ else {
     $taskRunResults
 }
 ```
+## Task Steps
+The [PSCustomObject] for a Task is very nested, especially for an 'Advanced Task'.  Use the `Select-MIATaskStep` command to simplify accessing the task steps.
+```powershell
+# Select the steps (ie. Source, Destination, etc.) for $task
+$task | Select-MIATaskStep
+
+# Select the process steps and expand Process object
+$task | Select-MIATaskStep -StepType Process -Expand
+```
 
 ## Calling endpoints that are not implemented
-Currently, not all REST API endpoints have a cooresponding command.  However, the `Invoke-MIARestMethod` can be used to call most any Get endpoint resource.
+Currently, not all REST API endpoints have a cooresponding command.  However, the `Invoke-MIARestMethod` can be used to call most any Get endpoint resource. _(Note: As of v0.3.4, the below endpoints have been implemented)._
 ```powershell
 # Use Invoke-MIARestMethod to call endpoints that don't have a command
 Invoke-MIARestMethod -Resource 'customscripts' -Query @{fields = 'ID,Name,Description'}

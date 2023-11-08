@@ -1,26 +1,25 @@
-function Get-MIASSLCert {
-    <#
+function Get-MIAStandardScript {
+     <#
         .SYNOPSIS
-        Get a MOVEit Automation SSL Cert(s)
+        Get a MOVEit Automation Standard Script(s)
     #>
     [CmdletBinding(DefaultParameterSetName='List')]
-    [OutputType('MOVEit.MIA.SslCert')]
+    [OutputType('MOVEit.MIA.StandardScript')]
     param (
         [Parameter(Mandatory,
                     Position = 0,
                     ValueFromPipeline,
                     ValueFromPipelineByPropertyName,
                     ParameterSetName='Detail')]
-        [ValidateNotNullOrEmpty()]                    
-        [string]$SSLCertificateThumbprint,
+        [Alias('Id')]                    
+        [string]$ScriptId,
 
         [Parameter(ParameterSetName='List')]
-        [string]$Issuer,
+        [string]$Name,
 
         [Parameter(ParameterSetName='List')]
-        [ValidateSet('Store','IssuedTo','Issuer','SerialNum',
-                    'ExpDate','ValidFromDate','SHA1Thumbprint',
-                    'xIsExpired','xInExpirationRange', IgnoreCase = $false)]
+        [ValidateSet('ID','Name','Description','Source',
+                    IgnoreCase = $false)]
         [string[]]$Fields,
 
         [Parameter(ParameterSetName='List')]
@@ -33,36 +32,36 @@ function Get-MIASSLCert {
         [switch]$IncludePaging,
 
         # Context
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]$Context = $script:DEFAULT_CONTEXT
     )
 
     begin {
         # Set the resource for this request
-        $resource = "sslcerts"
+        $resource = "standardscripts"
 
         # Set the typename for the output
-        $typeName = 'MOVEit.MIA.SslCert'
+        $typeName = 'MOVEit.MIA.StandardScript'        
     }
-
-    process {
+    
+    process{
         try {   
             # Send the request and write the response
             switch ($PSCmdlet.ParameterSetName) {
                 'Detail' {
-                    Invoke-MIARequest -Resource "$resource/$SSLCertificateThumbprint" -Context $Context |
+                    Invoke-MIARequest -Resource "$resource/$ScriptId" -Context $Context |
                         Write-MIAResponse -TypeName $typeName
                 }
                 'List' {
                     $query = @{}
                     switch ($PSBoundParameters.Keys) {
-                        Issuer  { $query['issuer']  = $Issuer }
+                        Name    { $query['name']    = $Name }
                         Fields  { $query['fields']  = $Fields -join ',' }
                         Page    { $query['page']    = $Page }
                         PerPage { $query['perPage'] = $PerPage }
                     }
-                    Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
+                    Invoke-MIARequest -Resource "$resource" -Context $Context -Body $query |
                         Write-MIAResponse -Typename $typeName -IncludePaging:$IncludePaging
                 }
             }

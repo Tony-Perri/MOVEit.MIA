@@ -1,26 +1,25 @@
-function Get-MIASSLCert {
+function Get-MIAResourceGroupAcl {
     <#
         .SYNOPSIS
-        Get a MOVEit Automation SSL Cert(s)
-    #>
+        Get a MOVEit Automation Resource Group ACL(s)
+    #>    
     [CmdletBinding(DefaultParameterSetName='List')]
-    [OutputType('MOVEit.MIA.SslCert')]
+    [OutputType('MOVEit.MIA.ResourceGroupAcl')]
     param (
         [Parameter(Mandatory,
                     Position = 0,
                     ValueFromPipeline,
                     ValueFromPipelineByPropertyName,
                     ParameterSetName='Detail')]
-        [ValidateNotNullOrEmpty()]                    
-        [string]$SSLCertificateThumbprint,
+        [string]$AclId,
+
+        [Parameter(ParameterSetName='List')]                    
+        [string]$ResourceGroupName,
+        
+        [Parameter(ParameterSetName='List')]                    
+        [string]$UserGroupName,
 
         [Parameter(ParameterSetName='List')]
-        [string]$Issuer,
-
-        [Parameter(ParameterSetName='List')]
-        [ValidateSet('Store','IssuedTo','Issuer','SerialNum',
-                    'ExpDate','ValidFromDate','SHA1Thumbprint',
-                    'xIsExpired','xInExpirationRange', IgnoreCase = $false)]
         [string[]]$Fields,
 
         [Parameter(ParameterSetName='List')]
@@ -29,38 +28,39 @@ function Get-MIASSLCert {
         [Parameter(ParameterSetName='List')]
         [int32]$PerPage,
 
-        [Parameter(ParameterSetName='List')]                         
+        [Parameter(ParameterSetName='List')]   
         [switch]$IncludePaging,
-
+        
         # Context
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]$Context = $script:DEFAULT_CONTEXT
     )
 
     begin {
         # Set the resource for this request
-        $resource = "sslcerts"
+        $resource = "resourcegroups/acls"
 
-        # Set the typename for the output
-        $typeName = 'MOVEit.MIA.SslCert'
+        # Set the typeName for the response
+        $typeName = 'MOVEit.MIA.ResourceGroupAcl'
     }
 
     process {
-        try {   
+        try {
             # Send the request and write the response
             switch ($PSCmdlet.ParameterSetName) {
                 'Detail' {
-                    Invoke-MIARequest -Resource "$resource/$SSLCertificateThumbprint" -Context $Context |
+                    Invoke-MIARequest -Resource "$resource/$AclId" -Context $Context |
                         Write-MIAResponse -TypeName $typeName
                 }
                 'List' {
                     $query = @{}
                     switch ($PSBoundParameters.Keys) {
-                        Issuer  { $query['issuer']  = $Issuer }
-                        Fields  { $query['fields']  = $Fields -join ',' }
-                        Page    { $query['page']    = $Page }
-                        PerPage { $query['perPage'] = $PerPage }
+                        ResourceGroupName   { $query['resourceGroupName']   = $ResourceGroupName }
+                        UserGroupName       { $query['userGroupName']       = $UserGroupName }
+                        Fields              { $query['fields']              = $Fields -join ',' }
+                        Page                { $query['page']                = $Page }
+                        PerPage             { $query['perPage']             = $PerPage }
                     }
                     Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
                         Write-MIAResponse -Typename $typeName -IncludePaging:$IncludePaging
@@ -68,7 +68,7 @@ function Get-MIASSLCert {
             }
         }
         catch {
-            $PSCmdLet.ThrowTerminatingError($PSItem)
+            $PSCmdlet.ThrowTerminatingError($PSItem)
         }
     }
 }

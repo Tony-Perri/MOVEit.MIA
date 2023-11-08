@@ -1,17 +1,16 @@
-function Remove-MIATask {
+function Remove-MIAResourceGroupAcl {
     <#
         .SYNOPSIS
-        Remove a MOVEit Automation Task
+        Remove a MOVEit Automation Resource Group Acl
     #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory,
                     ValueFromPipelineByPropertyName)]
-        [Alias('Id')]                    
-        [string]$TaskId,
+        [string]$AclId,
 
         # Context
-        [Parameter()]
+        [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [string]$Context = $script:DEFAULT_CONTEXT
     )
@@ -20,8 +19,8 @@ function Remove-MIATask {
         try {        
             # Build the request
             $params = @{
-                Resource = "tasks/$TaskId"
-                Method   = 'Delete'
+                Resource = "resourcegroups/acls/$AclId"
+                Method = 'Delete'
             }
 
             # Invoke the request

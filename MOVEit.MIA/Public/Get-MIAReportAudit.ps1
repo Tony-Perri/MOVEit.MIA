@@ -18,7 +18,7 @@ function Get-MIAReportAudit
     .INPUTS
         None.
     .OUTPUTS
-        Collection of audit records as custom MIAReportAudit objects.
+        Collection of audit records as custom MOVEit.MIA.ReportAudit objects.
     .LINK
         See link for /api/v1/reports/audit doc.
         https://docs.ipswitch.com/MOVEit/Automation2023/API/REST-API/index.html#_getauditreportusingpost
@@ -27,6 +27,7 @@ function Get-MIAReportAudit
         Use -verbose parameter to see the rsql predicate.        
     #>
     [CmdletBinding(DefaultParameterSetName='Predicate')]
+    [OutputType('MOVEit.MIA.ReportAudit')]
     param (
         # predicate for REST call
         [Parameter(Mandatory=$false, ParameterSetName='Predicate')]
@@ -106,23 +107,23 @@ function Get-MIAReportAudit
     try {
         # Build the request body
         $body = @{
-            predicate = "$Predicate"
-            orderBy = "$OrderBy"
-            maxCount = "$MaxCount"
+            predicate   = "$Predicate"
+            orderBy     = "$OrderBy"
+            maxCount    = "$MaxCount"
         } | ConvertTo-Json
 
         # Build the request
         $params = @{
-            Resource = "reports/audit"
-            Method = 'Post'
+            Resource    = "reports/audit"
+            Method      = 'Post'
             ContentType = 'application/json'
-            Body = $body
-            Context = $Context
+            Body        = $body
+            Context     = $Context
         }
 
         # Invoke the request and write out the response
         Invoke-MIARequest @params |
-            Write-MIAResponse -TypeName 'MIAReportAudit'
+            Write-MIAResponse -TypeName 'MOVEit.MIA.ReportAudit'
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

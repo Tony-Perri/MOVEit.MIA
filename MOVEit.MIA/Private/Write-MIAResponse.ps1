@@ -23,7 +23,7 @@ function Write-MIAResponse {
     # so the caller can check the first item for this information if they want
     # to loop through multiple pages, etc.
     if ($Response.paging -and $IncludePaging) {
-        $Response.paging.PSObject.TypeNames.Insert(0,'MIAPaging')
+        $Response.paging.PSObject.TypeNames.Insert(0,'MOVEit.MIA.Paging')
         $Response.paging 
     }
 

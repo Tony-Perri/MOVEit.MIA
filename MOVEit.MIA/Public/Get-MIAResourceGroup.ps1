@@ -1,26 +1,22 @@
-function Get-MIASSLCert {
+function Get-MIAResourceGroup {
     <#
         .SYNOPSIS
-        Get a MOVEit Automation SSL Cert(s)
+        Get a MOVEit Automation Resource Group(s)
     #>
     [CmdletBinding(DefaultParameterSetName='List')]
-    [OutputType('MOVEit.MIA.SslCert')]
+    [OutputType('MOVEit.MIA.ResourceGroup')]
     param (
         [Parameter(Mandatory,
                     Position = 0,
                     ValueFromPipeline,
                     ValueFromPipelineByPropertyName,
                     ParameterSetName='Detail')]
-        [ValidateNotNullOrEmpty()]                    
-        [string]$SSLCertificateThumbprint,
+        [string]$ResourceGroupName,
+
+        [Parameter(ParameterSetName='List')]                    
+        [string]$Name,
 
         [Parameter(ParameterSetName='List')]
-        [string]$Issuer,
-
-        [Parameter(ParameterSetName='List')]
-        [ValidateSet('Store','IssuedTo','Issuer','SerialNum',
-                    'ExpDate','ValidFromDate','SHA1Thumbprint',
-                    'xIsExpired','xInExpirationRange', IgnoreCase = $false)]
         [string[]]$Fields,
 
         [Parameter(ParameterSetName='List')]
@@ -29,35 +25,35 @@ function Get-MIASSLCert {
         [Parameter(ParameterSetName='List')]
         [int32]$PerPage,
 
-        [Parameter(ParameterSetName='List')]                         
+        [Parameter(ParameterSetName='List')]   
         [switch]$IncludePaging,
-
+        
         # Context
-        [Parameter(Mandatory=$false)]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]$Context = $script:DEFAULT_CONTEXT
     )
 
     begin {
         # Set the resource for this request
-        $resource = "sslcerts"
+        $resource = "resourcegroups"
 
-        # Set the typename for the output
-        $typeName = 'MOVEit.MIA.SslCert'
+        # Set the typeName for this response
+        $typeName = 'MOVEit.MIA.ResourceGroup'
     }
 
     process {
-        try {   
+        try {
             # Send the request and write the response
             switch ($PSCmdlet.ParameterSetName) {
                 'Detail' {
-                    Invoke-MIARequest -Resource "$resource/$SSLCertificateThumbprint" -Context $Context |
+                    Invoke-MIARequest -Resource "$resource/$ResourceGroupName" -Context $Context |
                         Write-MIAResponse -TypeName $typeName
                 }
                 'List' {
                     $query = @{}
                     switch ($PSBoundParameters.Keys) {
-                        Issuer  { $query['issuer']  = $Issuer }
+                        Name    { $query['name']    = $Name }
                         Fields  { $query['fields']  = $Fields -join ',' }
                         Page    { $query['page']    = $Page }
                         PerPage { $query['perPage'] = $PerPage }
@@ -68,7 +64,7 @@ function Get-MIASSLCert {
             }
         }
         catch {
-            $PSCmdLet.ThrowTerminatingError($PSItem)
+            $PSCmdlet.ThrowTerminatingError($PSItem)
         }
     }
 }

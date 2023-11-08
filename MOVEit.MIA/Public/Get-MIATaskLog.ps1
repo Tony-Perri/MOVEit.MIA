@@ -4,6 +4,8 @@ function Get-MIATaskLog {
         Get MOVEit Automation Task Log(s)
     #>
     [CmdletBinding(DefaultParameterSetName='List')]
+    [OutputType('MOVEit.MIA.TaskLog', ParameterSetName='List')]
+    [OutputType([string], ParameterSetName='Detail')]
     param (
         [Parameter(Mandatory,
                     ValueFromPipelineByPropertyName,
@@ -14,24 +16,21 @@ function Get-MIATaskLog {
         [string]$TaskId,
 
         [Parameter(Mandatory,
+                    ValueFromPipelineByPropertyName,
                     ParameterSetName='Detail')]
         [string]$TaskLogId,
 
-        [Parameter(Mandatory=$false,
-                    ParameterSetName='List')]
+        [Parameter(ParameterSetName='List')]
         [ValidateSet('id','taskId','startTime','exitStatus', IgnoreCase = $false)]                    
         [string[]]$Fields,
 
-        [Parameter(Mandatory=$false,
-                    ParameterSetName='List')]
+        [Parameter(ParameterSetName='List')]
         [int32]$Page,
 
-        [Parameter(Mandatory=$false,
-                    ParameterSetName='List')]
+        [Parameter(ParameterSetName='List')]
         [int32]$PerPage,
         
-        [Parameter(Mandatory=$false,
-                    ParameterSetName='List')]   
+        [Parameter(ParameterSetName='List')]   
         [switch]$IncludePaging,
 
         # Context
@@ -40,29 +39,31 @@ function Get-MIATaskLog {
         [string]$Context = $script:DEFAULT_CONTEXT
     )
 
-    try {   
-        # Set the resource for this request
+    process {
+        # Set the resource for this request        
         $resource = "tasks/$TaskId/log"
-                    
-        # Send the request and write the response
-        switch ($PSCmdlet.ParameterSetName) {
-            'Detail' {
-                # This request is for text/plain
-                Invoke-MIARequest -Resource "$resource/$TaskLogId" -Accept 'text/plain' -Context $Context
-            }
-            'List' {
-                $query = @{}
-                switch ($PSBoundParameters.Keys) {
-                    Fields { $query['fields'] = $Fields -join ','}
-                    Page { $query['page'] = $Page }
-                    PerPage { $query['perPage'] = $PerPage }
+
+        try {   
+            # Send the request and write the response
+            switch ($PSCmdlet.ParameterSetName) {
+                'Detail' {
+                    # This request is for text/plain
+                    Invoke-MIARequest -Resource "$resource/$TaskLogId" -Accept 'text/plain' -Context $Context
                 }
-                Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
-                    Write-MIAResponse -Typename "MIATaskLog" -IncludePaging:$IncludePaging
+                'List' {
+                    $query = @{}
+                    switch ($PSBoundParameters.Keys) {
+                        Fields  { $query['fields']  = $Fields -join ','}
+                        Page    { $query['page']    = $Page }
+                        PerPage { $query['perPage'] = $PerPage }
+                    }
+                    Invoke-MIARequest -Resource "$resource" -Body $query -Context $Context |
+                        Write-MIAResponse -Typename 'MOVEit.MIA.TaskLog' -IncludePaging:$IncludePaging
+                }
             }
         }
-    }
-    catch {
-        $PSCmdlet.ThrowTerminatingError($PSItem)
+        catch {
+            $PSCmdlet.ThrowTerminatingError($PSItem)
+        }
     }
 }

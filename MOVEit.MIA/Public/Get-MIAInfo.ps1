@@ -4,6 +4,7 @@ function Get-MIAInfo {
         Get MOVEit Automation Server Info
     #>
     [CmdletBinding()]
+    [OutputType('MOVEit.MIA.Info')]
     param (
         # Context
         [Parameter(Mandatory=$false)]
@@ -17,7 +18,7 @@ function Get-MIAInfo {
                     
         # Send the request and output the response
         Invoke-MIARequest -Resource $resource -Context $Context |
-            Write-MIAResponse -TypeName 'MIAInfo' 
+            Write-MIAResponse -TypeName 'MOVEit.MIA.Info' 
     }
     catch {
         $PSCmdlet.ThrowTerminatingError($PSItem)

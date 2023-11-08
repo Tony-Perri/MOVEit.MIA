@@ -4,7 +4,7 @@
     <View>
       <Name>MIAHost</Name>
       <ViewSelectedBy>
-        <TypeName>MIAHost</TypeName>
+        <TypeName>MOVEit.MIA.Host</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -22,11 +22,12 @@
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Host</Label>
-            <Width>24</Width>
+            <Width>30</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>IsUsed</Label>
+            <Label>Assigned</Label>
             <Width>10</Width>
+            <Alignment>Right</Alignment>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -45,7 +46,13 @@
                 <PropertyName>Host</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>IsUsed</PropertyName>
+                <ScriptBlock>
+                  if ($_.psobject.properties['UsedByCount']) {
+                    $_.UsedByCount
+                  } else {
+                    $_.IsUsed
+                  }
+                </ScriptBlock>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
@@ -55,7 +62,7 @@
     <View>
       <Name>MIATask</Name>
       <ViewSelectedBy>
-        <TypeName>MIATask</TypeName>
+        <TypeName>MOVEit.MIA.Task</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -71,6 +78,10 @@
             <Label>Scheduled</Label>
             <Width>12</Width>
           </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Description</Label>
+            <Width>60</Width>
+          </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
           <TableRowEntry>
@@ -84,6 +95,9 @@
               <TableColumnItem>
                 <PropertyName>Scheduled</PropertyName>
               </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>$_.Info.Description</ScriptBlock>
+              </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
         </TableRowEntries>
@@ -92,7 +106,7 @@
     <View>
       <Name>MIATaskRunning</Name>
       <ViewSelectedBy>
-        <TypeName>MIATaskRunning</TypeName>
+        <TypeName>MOVEit.MIA.TaskRunning</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -217,7 +231,7 @@
     <View>
       <Name>MIATaskLog</Name>
       <ViewSelectedBy>
-        <TypeName>MIATaskLog</TypeName>
+        <TypeName>MOVEit.MIA.TaskLog</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -262,7 +276,7 @@
     <View>
       <Name>MIAPgpKey</Name>
       <ViewSelectedBy>
-        <TypeName>MIAPgpKey</TypeName>
+        <TypeName>MOVEit.MIA.PgpKey</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -314,7 +328,7 @@
     <View>
       <Name>MIASshKey</Name>
       <ViewSelectedBy>
-        <TypeName>MIASshKey</TypeName>
+        <TypeName>MOVEit.MIA.SshKey</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -351,7 +365,7 @@
     <View>
       <Name>MIASslCert</Name>
       <ViewSelectedBy>
-        <TypeName>MIASslCert</TypeName>
+        <TypeName>MOVEit.MIA.SslCert</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -388,7 +402,8 @@
     <View>
       <Name>MIACustomScript</Name>
       <ViewSelectedBy>
-        <TypeName>MIACustomScript</TypeName>
+        <TypeName>MOVEit.MIA.StandardScript</TypeName>
+        <TypeName>MOVEit.MIA.CustomScript</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -430,10 +445,49 @@
       </TableControl>
     </View>
     <View>
+      <Name>MIAResourceGroup</Name>
+      <ViewSelectedBy>
+        <TypeName>MOVEit.MIA.ResourceGroup</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>Name</Label>
+            <Width>36</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Notes</Label>
+            <Width>40</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Members</Label>
+            <Width>40</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Notes</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>
+                  ($_.members | Group-Object -Property t -NoElement | ForEach-Object { "$($_.Name)($($_.Count))" }) -join ', '
+                </ScriptBlock>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>MIAPaging</Name>
       <OutOfBand />        
       <ViewSelectedBy>
-        <TypeName>MIAPaging</TypeName>
+        <TypeName>MOVEit.MIA.Paging</TypeName>
       </ViewSelectedBy>
       <CustomControl>     
         <CustomEntries>
@@ -464,7 +518,7 @@
     <View>
       <Name>MIAReportTaskRun</Name>
       <ViewSelectedBy>
-        <TypeName>MIAReportTaskRun</TypeName>
+        <TypeName>MOVEit.MIA.ReportTaskRun</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -544,9 +598,87 @@
       </TableControl>
     </View>
     <View>
+      <Name>MIAReportTaskRunByTask</Name>
+      <ViewSelectedBy>
+        <TypeName>MOVEit.MIA.ReportTaskRun</TypeName>
+      </ViewSelectedBy>
+      <GroupBy>
+        <PropertyName>TaskName</PropertyName>
+      </GroupBy>
+      <TableControl>
+        <TableHeaders>
+        <TableColumnHeader>
+            <Label>Start Time</Label>
+            <Width>20</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Duration</Label>
+            <Width>8</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Result</Label>
+            <Width>12</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Files Sent</Label>
+            <Width>12</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Total Bytes Sent</Label>
+            <Width>12</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Message</Label>
+            <Width>60</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <ScriptBlock>"{0,10:yyyy-MM-dd}  {0,8:h:mm tt}" -f [DateTime]::Parse($_.StartTime)</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>"{0:m\:ss}" -f [TimeSpan]::FromSeconds($_.DurationSecond)</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Status</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>FilesSent</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>
+                  switch($_.TotalBytesSent)
+                  {
+                    { $_ -gt 1tb }
+                            { "{0:n0} TB" -f ($_ / 1tb);break }
+                    { $_ -gt 1gb }
+                            { "{0:n0} GB" -f ($_ / 1gb);break }
+                    { $_ -gt 1mb }
+                            { "{0:n0} MB" -f ($_ / 1mb);break }
+                    { $_ -gt 1kb }
+                            { "{0:n0} KB" -f ($_ / 1Kb);break }
+                    { $_ -gt 1 }
+                            { "{0} B" -f $_}
+                  }
+                </ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>StatusMsg</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
       <Name>MIAReportFileActivity</Name>
       <ViewSelectedBy>
-        <TypeName>MIAReportFileActivity</TypeName>
+        <TypeName>MOVEit.MIA.ReportFileActivity</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -627,7 +759,7 @@
     <View>
       <Name>MIAReportFileActivityByTaskrun</Name>
       <ViewSelectedBy>
-        <TypeName>MIAReportFileActivity</TypeName>
+        <TypeName>MOVEit.MIA.ReportFileActivity</TypeName>
       </ViewSelectedBy>
       <GroupBy>
         <Label>Task Run</Label>
@@ -710,7 +842,7 @@
     <View>
       <Name>MIAReportAudit</Name>
       <ViewSelectedBy>
-        <TypeName>MIAReportAudit</TypeName>
+        <TypeName>MOVEit.MIA.ReportAudit</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>

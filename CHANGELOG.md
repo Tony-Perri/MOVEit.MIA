@@ -1,3 +1,16 @@
+## 0.3.4 - November 2023
+* Add `Get-MIAResourceGroup`
+* Add Description to `Get-MIATask` output
+* Add `Get-MIAUserGroup`
+* Add `Select-MIATaskStep` to select specific stepType(s) from Task objects, especially Advanced Tasks
+* Add `*-MIAResourceGroupAcl` functions
+* Add `Get-MIAStandardScript` function
+* Add `Get-MIADateList` function
+* Add `Get-GlobalParameter` function
+* Change custom object typenames to `MOVEit.MIA.*` format
+* Cleanup `param()` blocks and add `begin{}` and `process{}` blocks
+* Changed default view for `Get-MIAHost` to display UsedByCount for v2023.1 instead of IsUsed
+* Update `Get-MIAHost` for GoogleStorage host type (v2023.1 required)
 ## 0.3.3 - October 2023
 * Add `ServerHost` parameter to `Connect-MIAServer`
 * Add support for -SkipCertificateCheck

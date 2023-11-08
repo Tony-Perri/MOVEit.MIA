@@ -19,6 +19,7 @@ function Format-RestErrorDetails{
                     if     ($restResponse.detail)            { $restResponse.detail }
                     elseif ($restResponse.error_description) { $restResponse.error_description}
                     elseif ($restResponse.error)             { $restResponse.error}
+                    elseif ($restResponse.errors)            { $restResponse.errors.message -join '. '}
                     else                                     { 'Unspecified error. Check the $Error variable'}
                 
                 $ErrorRecord.ErrorDetails = [System.Management.Automation.ErrorDetails]::new(
