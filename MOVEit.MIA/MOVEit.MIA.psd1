@@ -12,7 +12,7 @@
 RootModule = 'MOVEit.MIA.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.3.4'
+ModuleVersion = '0.3.5'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop','Core')
@@ -153,7 +153,7 @@ PrivateData = @{
         # ReleaseNotes = ''
 
         # Prerelease string of this module
-        # Prerelease = 'develop'
+        Prerelease = 'develop'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
