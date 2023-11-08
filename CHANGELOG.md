@@ -1,4 +1,4 @@
-## 0.3.4 -
+## 0.3.4 - November 2023
 * Add `Get-MIAResourceGroup`
 * Add Description to `Get-MIATask` output
 * Add `Get-MIAUserGroup`
