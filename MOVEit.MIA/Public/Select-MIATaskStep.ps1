@@ -1,9 +1,13 @@
-function Select-MiATaskStep {
+function Select-MIATaskStep {
     <#
         .SYNOPSIS
         Select type(s) of steps from anywhere in a task
         .NOTES
         Most useful for Advanced tasks where steps are nested
+        .EXAMPLE
+        $task | Select-MIATaskStep
+        .EXAMPLE
+        $task | Select-MIATaskStep -StepType Process -Expand
     #>
     [CmdletBinding()]
     param (
@@ -14,7 +18,10 @@ function Select-MiATaskStep {
         [Parameter()]
         [ValidateSet('Source', 'Process', 'Destination', 'NextAction', 
                      'Email', 'Comment', 'For', 'If', 'RunTask', 'UpdOrig')]
-        [string[]]$StepType = @('Source', 'Process', 'Destination', 'NextAction', 'Email', 'RunTask')
+        [string[]]$StepType = @('Source', 'Process', 'Destination', 'NextAction', 'Email', 'RunTask'),
+
+        [Parameter()]
+        [switch]$Expand
     )
 
     begin { 
@@ -30,7 +37,14 @@ function Select-MiATaskStep {
             $objArray[$i].PSObject.Properties | ForEach-Object {
                 if ($_.Name -in $StepType) {
                     # This is a property we are looking for
-                    [pscustomobject]@{$_.Name = $_.Value}                
+                    if ($Expand) {
+                        # ... add a member for the step type and return the expanded object
+                        $_.Value | Add-Member -MemberType NoteProperty -Name 'StepType' -Value $_.Name -Force
+                        $_.Value
+                    } else {
+                        # ... return an object where the property is the steptype
+                        [pscustomobject]@{$_.Name = $_.Value}
+                    }
                 }
                 
                 if ($_.Name -in $containerName) {
