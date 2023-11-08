@@ -31,6 +31,7 @@ Update-TypeData -TypeName 'MOVEit.MIA.SslCert' -MemberType 'ScriptMethod' -Membe
 
 # Add GetSteps() method to MOVEit.MIA.Task to make it easier to work
 # with the steps for a task
+# NOTE: This only works for Traditional tasks.  Use Select-MIATaskStep instead.
 Update-TypeData -TypeName 'MOVEit.MIA.Task' -MemberType 'ScriptMethod' -MemberName 'GetSteps' -Force -Value {
     # Iterate over each step in this object and return an array that makes it easier
     # to work with the steps in the object.
