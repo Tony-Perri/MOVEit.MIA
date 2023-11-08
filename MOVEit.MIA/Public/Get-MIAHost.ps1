@@ -20,7 +20,7 @@ function Get-MIAHost {
         [Parameter(ParameterSetName='List')]
         [ValidateSet('FileSystem', 'FTP', 'POP3', 'Share',
                         'siLock', 'SMTP', 'SSHFTP', 'AS1', 'AS2', 'AS3','S3',
-                        'SharePoint', 'AzureBlob', IgnoreCase = $false)]
+                        'SharePoint', 'AzureBlob', 'GoogleStorage', IgnoreCase = $false)]
         [string]$Type,
 
         [Parameter(ParameterSetName='List')]
@@ -81,7 +81,7 @@ function Get-MIAHost {
                     # correct properties
                     $hostTypes = @('FileSystem', 'FTP', 'POP3', 'Share',
                         'siLock', 'SMTP', 'SSHFTP', 'AS1', 'AS2', 'AS3','S3',
-                        'SharePoint', 'AzureBlob')
+                        'SharePoint', 'AzureBlob', 'GoogleStorage')
 
                     # Doing this as an array so we can directly modify the items array
                     for($i=0; $i -lt $response.items.count; $i++) {

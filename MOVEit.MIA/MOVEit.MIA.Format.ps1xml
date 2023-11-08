@@ -22,11 +22,12 @@
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Host</Label>
-            <Width>24</Width>
+            <Width>30</Width>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>IsUsed</Label>
+            <Label>Assigned</Label>
             <Width>10</Width>
+            <Alignment>Right</Alignment>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -45,7 +46,13 @@
                 <PropertyName>Host</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>IsUsed</PropertyName>
+                <ScriptBlock>
+                  if ($_.psobject.properties['UsedByCount']) {
+                    $_.UsedByCount
+                  } else {
+                    $_.IsUsed
+                  }
+                </ScriptBlock>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>
